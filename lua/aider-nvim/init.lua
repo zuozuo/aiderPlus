@@ -183,7 +183,6 @@ function M.create_chat_window()
         row = row,
         style = "minimal",
         border = "rounded",
-        scrollable = true,
     }
 
     if not chat_win or not vim.api.nvim_win_is_valid(chat_win) then
