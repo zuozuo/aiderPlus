@@ -5,6 +5,7 @@ A Neovim plugin to enhance the Aider experience with Floaterm integration.
 ## Features
 
 - Interactive chat window with Floaterm integration
+- AI inline assistant triggered by Cmd-K (macOS) at cursor position
 - Code context awareness with line numbers
 - Visual selection support
 - Quick command suggestions
