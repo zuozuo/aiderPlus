@@ -8,10 +8,9 @@ local original_cursor_pos = nil
 local original_visual_selection = nil
 local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
--- Define highlight group for smaller ghost text
+-- Define highlight group for smaller ghost text that inherits from Comment
 vim.api.nvim_set_hl(0, "AiderGhostText", {
-    ctermfg = "DarkGray",
-    fg = "#404040",  -- 更暗的灰色
+    link = "Comment",
     italic = true,
     default = true
 })
