@@ -56,6 +56,13 @@ function M.submit(context)
             vim.fn["floaterm#terminal#send"](term_bufnr, {context})
         end
     end
+    
+    -- Switch back to original buffer
+    local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
+    if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
+        vim.api.nvim_set_current_buf(original_buf)
+    end
+    
     M.toggle()
 end
 
