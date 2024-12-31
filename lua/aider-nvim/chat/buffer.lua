@@ -96,6 +96,14 @@ function M.create()
             local content = vim.api.nvim_buf_get_lines(chat_buf, 0, -1, false)
             if #content > 1 or (#content == 1 and #content[1] > #config.prompt) then
                 vim.api.nvim_buf_clear_namespace(chat_buf, ghost_text_ns, 0, -1)
+            elseif #content == 1 and #content[1] == #config.prompt then
+                -- Re-add ghost text when input is cleared
+                vim.api.nvim_buf_set_extmark(chat_buf, ghost_text_ns, 0, #config.prompt, {
+                    virt_text = {{"use / to send quick `commands`", "Comment"}},
+                    virt_text_pos = "eol",
+                    hl_mode = "combine",
+                    priority = 10
+                })
             end
         end
     })
