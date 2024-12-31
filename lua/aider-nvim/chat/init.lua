@@ -62,8 +62,6 @@ function M.submit(context)
     if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
         vim.api.nvim_set_current_buf(original_buf)
     end
-    
-    M.toggle()
 end
 
 return M
