@@ -236,7 +236,7 @@ function M.submit_and_close()
         local line = vim.api.nvim_buf_get_lines(chat_buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
         
         -- Extract input after the prompt
-        local input = string.sub(line, #config.prompt + 1)
+        local input = string.sub(line, #config.prompt)
         
         -- TODO: Process the input (send to Aider, etc.)
         if input and #input > 0 then
