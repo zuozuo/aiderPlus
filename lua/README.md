@@ -19,7 +19,7 @@ Using packer.nvim:
 use {
   'your-username/aider.nvim',
   requires = {
-    'voldikss/vim-floaterm'  -- Required dependency
+    'voldikss/vim-floaterm'  -- Required dependency (https://github.com/voldikss/vim-floaterm)
   },
   config = function()
     require('aider-nvim').setup({
@@ -35,7 +35,7 @@ Using lazy.nvim:
 {
   "your-username/aider.nvim",
   dependencies = {
-    "voldikss/vim-floaterm"  -- Required dependency
+    "voldikss/vim-floaterm"  -- Required dependency (https://github.com/voldikss/vim-floaterm)
   },
   config = function()
     require("aider-nvim").setup({
