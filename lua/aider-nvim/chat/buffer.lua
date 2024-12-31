@@ -103,6 +103,14 @@ function M.create()
     
     vim.cmd("startinsert")
     vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt})
+    
+    -- Add ghost text hint
+    vim.api.nvim_buf_set_extmark(chat_buf, -1, 0, #config.prompt, {
+        virt_text = {{"use / to send quick `commands`", "Comment"}},
+        virt_text_pos = "eol",
+        hl_mode = "combine",
+        priority = 10
+    })
 end
 
 function M.close()
