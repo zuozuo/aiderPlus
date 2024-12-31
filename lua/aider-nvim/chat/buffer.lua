@@ -8,10 +8,12 @@ local original_cursor_pos = nil
 local original_visual_selection = nil
 local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
+-- Define highlight group for ghost text that appears after the prompt
+-- This text provides guidance about available commands and uses a subtle style
 vim.api.nvim_set_hl(0, "AiderGhostText", {
-    link = "Comment",
-    italic = true,
-    default = true
+    link = "Comment",  -- Inherit color scheme from editor's comment style
+    italic = true,     -- Use italic font for a softer, less intrusive appearance
+    default = true     -- Ensure this style is used by default
 })
 
 -- This highlight group is used for the ghost text that appears after the prompt
