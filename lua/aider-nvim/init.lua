@@ -53,6 +53,21 @@ function M.toggle_chat()
     chat.toggle()
 end
 
+function M.get_current_line()
+    local buffer = require("aider-nvim.chat.buffer")
+    local original_buf = buffer.get_original_buf()
+    local original_cursor_pos = buffer.get_original_cursor_pos()
+    
+    if not original_buf or not original_cursor_pos then
+        return "", 0
+    end
+    
+    local line_num = original_cursor_pos[1]
+    local line = vim.api.nvim_buf_get_lines(original_buf, line_num - 1, line_num, false)[1] or ""
+    
+    return line, line_num
+end
+
 function M.get_code_context()
     local config = require("aider-nvim.config").get()
     local buffer = require("aider-nvim.chat.buffer")
@@ -77,10 +92,19 @@ function M.get_code_context()
 end
 
 function M.submit_and_close()
+    local line, line_num = M.get_current_line()
     local context = M.get_code_context()
+    
+    local combined = ""
+    if line and #line > 0 then
+        combined = string.format("Current line (%d): %s\n", line_num, line)
+    end
     if context and #context > 0 then
-        -- 将上下文传递给 chat.submit()
-        chat.submit(context)
+        combined = combined .. "Code context:\n" .. context
+    end
+    
+    if #combined > 0 then
+        chat.submit(combined)
     else
         vim.notify("No code context found", vim.log.levels.WARN)
     end
