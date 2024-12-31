@@ -210,7 +210,11 @@ end
 function M.toggle_chat()
     if chat_win and vim.api.nvim_win_is_valid(chat_win) then
         vim.api.nvim_win_close(chat_win, true)
+        if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
+            vim.api.nvim_buf_delete(chat_buf, { force = true })
+        end
         chat_win = nil
+        chat_buf = nil
         vim.notify("Chat closed", vim.log.levels.INFO)
         return  -- 直接返回，不再创建新窗口
     end
