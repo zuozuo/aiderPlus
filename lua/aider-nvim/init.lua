@@ -206,7 +206,7 @@ function M.create_chat_window()
     
     -- Add prompt and enter insert mode
     vim.api.nvim_buf_set_lines(chat_buf, 0, -1, false, {"Send text to Aider:  "})  -- 增加一个空格
-    vim.api.nvim_win_set_cursor(chat_win, {1, #"Send text to Aider:  "})  -- 更新光标位置
+    vim.api.nvim_win_set_cursor(chat_win, {1, #"Send text to Aider:  " + 1})  -- 将光标放在提示后
     vim.cmd("startinsert")
 end
 
