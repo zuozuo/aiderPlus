@@ -77,12 +77,24 @@ function M.send_selection()
   local content = ""
   local mode = vim.fn.mode()
   
-  -- Handle visual mode selection
+  -- Check if we have a range from command mode
+  local line1 = vim.v.lnum1
+  local line2 = vim.v.lnum2
+  
+  -- If we have a range (from command mode)
+  if line1 ~= line2 then
+    local lines = vim.api.nvim_buf_get_lines(buf, line1 - 1, line2, false)
+    content = table.concat(lines, "\n")
+    vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
+    -- TODO: Send to Aider
+    vim.notify("Selection sent to Aider", vim.log.levels.INFO)
+    return
+  end
+  
+  -- Handle visual mode selection (from keybinding)
   if mode == "v" or mode == "V" or mode == "\22" then  -- visual, linewise visual, blockwise visual
     local start_pos = vim.api.nvim_buf_get_mark(buf, "<")
     local end_pos = vim.api.nvim_buf_get_mark(buf, ">")
-    vim.notify("Visual mode detected", vim.log.levels.INFO)
-    vim.notify("Start position: " .. start_pos[1] .. ":" .. start_pos[2], vim.log.levels.INFO)
     if start_pos and end_pos then
       local lines = vim.api.nvim_buf_get_lines(buf, start_pos[1] - 1, end_pos[1], false)
       content = table.concat(lines, "\n")
@@ -97,7 +109,6 @@ function M.send_selection()
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
   local line = vim.api.nvim_buf_get_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
   content = line
-  vim.notify("Mode: " .. mode, vim.log.levels.INFO)
   vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
   -- TODO: Send to Aider
   vim.notify("Current line sent to Aider", vim.log.levels.INFO)
