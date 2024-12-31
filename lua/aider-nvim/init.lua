@@ -207,6 +207,23 @@ function M.create_chat_window()
     
     -- Add prompt and enter insert mode
     vim.api.nvim_buf_set_lines(chat_buf, 0, -1, false, {config.prompt})
+    
+    -- Mark prompt as read-only
+    vim.api.nvim_buf_add_highlight(chat_buf, -1, "Comment", 0, 0, #config.prompt)
+    vim.api.nvim_buf_set_option(chat_buf, "modifiable", true)
+    
+    -- Set up autocmd to protect prompt text
+    vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP"}, {
+        buffer = chat_buf,
+        callback = function()
+            local lines = vim.api.nvim_buf_get_lines(chat_buf, 0, 1, false)
+            if not lines[1] or not lines[1]:find("^" .. vim.pesc(config.prompt)) then
+                vim.api.nvim_buf_set_lines(chat_buf, 0, 1, false, {config.prompt})
+                vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt + 1})
+            end
+        end
+    })
+    
     vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt + 1})  -- 将光标放在提示后
     vim.cmd("startinsert")
 end
@@ -236,7 +253,7 @@ function M.submit_and_close()
         local line = vim.api.nvim_buf_get_lines(chat_buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
         
         -- Extract input after the prompt
-        local input = string.sub(line, #config.prompt)
+        local input = string.sub(line, #config.prompt + 1)
         
         -- TODO: Process the input (send to Aider, etc.)
         if input and #input > 0 then
