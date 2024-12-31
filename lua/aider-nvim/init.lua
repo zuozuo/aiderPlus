@@ -1,5 +1,9 @@
 local M = {}
 
+-- Chat window state
+local chat_buf = nil
+local chat_win = nil
+
 local config = {
     -- Default configuration options
     auto_start = true,
@@ -150,9 +154,52 @@ function M.send_selection()
     send_to_aider(content)
 end
 
+function M.create_chat_window()
+    -- Create new buffer if not exists
+    if not chat_buf or not vim.api.nvim_buf_is_valid(chat_buf) then
+        chat_buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_name(chat_buf, "AiderPlus Chat")
+        vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
+    end
+
+    -- Create floating window
+    local width = math.floor(vim.o.columns * 0.8)
+    local height = math.floor(vim.o.lines * 0.8)
+    local opts = {
+        relative = "editor",
+        width = width,
+        height = height,
+        col = (vim.o.columns - width) / 2,
+        row = (vim.o.lines - height) / 2,
+        style = "minimal",
+        border = "rounded",
+    }
+
+    if not chat_win or not vim.api.nvim_win_is_valid(chat_win) then
+        chat_win = vim.api.nvim_open_win(chat_buf, true, opts)
+    else
+        vim.api.nvim_win_set_config(chat_win, opts)
+        vim.api.nvim_set_current_win(chat_win)
+    end
+
+    -- Set window options
+    vim.api.nvim_win_set_option(chat_win, "number", true)
+    vim.api.nvim_win_set_option(chat_win, "relativenumber", true)
+    vim.api.nvim_win_set_option(chat_win, "wrap", true)
+
+    -- Set keymaps for the chat window
+    vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
+end
+
 function M.toggle_chat()
-    -- Toggle Aider chat window
-    vim.notify("Chat toggled", vim.log.levels.INFO)
+    if chat_win and vim.api.nvim_win_is_valid(chat_win) then
+        vim.api.nvim_win_close(chat_win, true)
+        chat_win = nil
+        vim.notify("Chat closed", vim.log.levels.INFO)
+    else
+        M.create_chat_window()
+        vim.notify("Chat opened", vim.log.levels.INFO)
+    end
 end
 
 function M.call_aider_plus()
