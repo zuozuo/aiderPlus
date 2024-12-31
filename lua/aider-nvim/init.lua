@@ -102,8 +102,8 @@ function M.send_selection()
         return
     end
 
-    vim.cmd("'<,'>FloatermSend")
-    return
+    -- vim.cmd("'<,'>FloatermSend")
+    -- return
 
     local content = ""
     local mode = vim.fn.mode()
