@@ -41,3 +41,23 @@ require('aider-nvim').setup({
 - `<leader>ac` - Send current buffer content to Aider
 - `<leader>as` - Send visual selection to Aider
 - `<leader>at` - Toggle Aider chat window
+- `<leader>ap` - Call Aider Plus functionality
+
+## Aider Plus
+
+The `call_aider_plus` function provides extended Aider capabilities. You can call it via:
+
+1. Default keybinding: `<leader>ap`
+2. Direct Lua call:
+```lua
+require('aider-nvim').call_aider_plus()
+```
+
+To customize the keybinding:
+```lua
+require('aider-nvim').setup({
+  keybindings = {
+    call_aider_plus = "<your-preferred-keybinding>"
+  }
+})
+```
