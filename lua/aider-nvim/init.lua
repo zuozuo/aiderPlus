@@ -224,7 +224,7 @@ function M.create_chat_window()
         end
     })
     
-    vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt + 1})  -- 将光标放在提示后
+    vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt})  -- 将光标放在提示后
     vim.cmd("startinsert")
 end
 
