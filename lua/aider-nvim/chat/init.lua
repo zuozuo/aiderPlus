@@ -47,15 +47,14 @@ function M.submit(context)
                 -- Get relative path from current working directory
                 local cwd = vim.fn.getcwd()
                 local rel_path = full_path:gsub("^" .. cwd .. "/", "")
-                vim.notify("Sending file path to AiderPlus-Chat: " .. rel_path, vim.log.levels.INFO)
                 vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. rel_path})
             end
         end
 
-        -- -- Then send context if it exists
-        -- if context and #context > 0 then
-        --     vim.fn["floaterm#terminal#send"](term_bufnr, {context})
-        -- end
+        -- Then send context if it exists
+        if context and #context > 0 then
+            vim.fn["floaterm#terminal#send"](term_bufnr, {context})
+        end
     end
     M.toggle()
 end

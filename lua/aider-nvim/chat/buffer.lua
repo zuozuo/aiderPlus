@@ -19,9 +19,6 @@ vim.api.nvim_set_hl(0, "AiderGhostText", {
 -- to guide users about available commands. It uses a subtle, italic style that
 -- matches the editor's comment style to be non-intrusive yet visible.
 
-
-
-
 function M.create()
     local config = require("aider-nvim.config").get()
     
