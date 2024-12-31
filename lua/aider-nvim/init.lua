@@ -52,20 +52,32 @@ function M.start_aider()
 end
 
 function M.send_code()
-  -- Send current buffer content to Aider
-  local content = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
-  -- TODO: Send to Aider
-  vim.notify("Code sent to Aider", vim.log.levels.INFO)
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.api.nvim_buf_is_valid(buf) then
+    local content = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
+    -- TODO: Send to Aider
+    vim.notify("Code sent to Aider", vim.log.levels.INFO)
+  else
+    vim.notify("Invalid buffer", vim.log.levels.ERROR)
+  end
 end
 
 function M.send_selection()
-  -- Send visual selection to Aider
-  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-  local lines = vim.api.nvim_buf_get_lines(0, start_pos[1] - 1, end_pos[1], false)
-  local content = table.concat(lines, "\n")
-  -- TODO: Send to Aider
-  vim.notify("Selection sent to Aider", vim.log.levels.INFO)
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.api.nvim_buf_is_valid(buf) then
+    local start_pos = vim.api.nvim_buf_get_mark(buf, "<")
+    local end_pos = vim.api.nvim_buf_get_mark(buf, ">")
+    if start_pos and end_pos then
+      local lines = vim.api.nvim_buf_get_lines(buf, start_pos[1] - 1, end_pos[1], false)
+      local content = table.concat(lines, "\n")
+      -- TODO: Send to Aider
+      vim.notify("Selection sent to Aider", vim.log.levels.INFO)
+    else
+      vim.notify("No selection found", vim.log.levels.ERROR)
+    end
+  else
+    vim.notify("Invalid buffer", vim.log.levels.ERROR)
+  end
 end
 
 function M.toggle_chat()
