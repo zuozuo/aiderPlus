@@ -33,7 +33,7 @@ function M.setup_commands()
         local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
         local content = table.concat(lines, "\n")
         -- TODO: Send to Aider
-        vim.notify("Selection sent to Aider", vim.log.levels.INFO)
+        vim.notify("Selection sent to Aider111", vim.log.levels.INFO)
       else
         M.send_selection()
       end
