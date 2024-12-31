@@ -41,14 +41,15 @@ function M.submit(context)
         -- 将输入发送到 floaterm
         -- Get current file path and send it first
         local file_path = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+        vim.notify("Sending file path to AiderPlus-Chat: " .. file_path, vim.log.levels.INFO)
         if file_path and #file_path > 0 then
             vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. file_path})
         end
 
-        -- Then send context if it exists
-        if context and #context > 0 then
-            vim.fn["floaterm#terminal#send"](term_bufnr, {context})
-        end
+        -- -- Then send context if it exists
+        -- if context and #context > 0 then
+        --     vim.fn["floaterm#terminal#send"](term_bufnr, {context})
+        -- end
     end
     M.toggle()
 end
