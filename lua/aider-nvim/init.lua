@@ -96,6 +96,13 @@ local function send_to_aider(text)
         vim.notify("No text to send to Aider", vim.log.levels.WARN)
         return
     end
+    
+    -- Check if Floaterm exists
+    if vim.fn.exists(":FloatermSend") == 0 then
+        vim.notify("Floaterm is not available. Please install and configure Floaterm first.", vim.log.levels.ERROR)
+        return
+    end
+    
     -- Add Aider command prefix if needed
     local command = text
 
