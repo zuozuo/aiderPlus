@@ -58,7 +58,7 @@ function M.submit(context)
     end
     
     -- Switch back to original window using ctrl-w w and close chat window
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>w", true, false, true), "n", true)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>h", true, false, true), "n", true)
     buffer.close()
 end
 
