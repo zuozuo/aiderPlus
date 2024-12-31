@@ -74,14 +74,16 @@ function M.send_selection()
     return
   end
 
-  -- Check if in visual mode
+  local content = ""
   local mode = vim.fn.mode()
+  
+  -- Handle visual mode selection
   if mode == "v" or mode == "V" or mode == "\22" then  -- visual, linewise visual, blockwise visual
     local start_pos = vim.api.nvim_buf_get_mark(buf, "<")
     local end_pos = vim.api.nvim_buf_get_mark(buf, ">")
     if start_pos and end_pos then
       local lines = vim.api.nvim_buf_get_lines(buf, start_pos[1] - 1, end_pos[1], false)
-      local content = table.concat(lines, "\n")
+      content = table.concat(lines, "\n")
       vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
       -- TODO: Send to Aider
       vim.notify("Selection sent to Aider", vim.log.levels.INFO)
@@ -89,10 +91,11 @@ function M.send_selection()
     end
   end
 
-  -- If not in visual mode, send current line
+  -- Handle normal mode (single line)
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
   local line = vim.api.nvim_buf_get_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
-  vim.notify("Selected code:\n" .. line, vim.log.levels.INFO)
+  content = line
+  vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
   -- TODO: Send to Aider
   vim.notify("Current line sent to Aider", vim.log.levels.INFO)
 end
