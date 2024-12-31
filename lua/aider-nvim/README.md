@@ -52,6 +52,8 @@ The `call_aider_plus` function provides extended Aider capabilities. You can cal
 ```vim
 :AiderPlus send_code
 :AiderPlus send_selection
+:AiderPlus toggle_chat
+:AiderPlus call_aider_plus
 ```
 3. Direct Lua call:
 ```lua

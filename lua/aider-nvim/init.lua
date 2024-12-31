@@ -27,13 +27,17 @@ function M.setup_commands()
       M.send_code()
     elseif action == "send_selection" then
       M.send_selection()
+    elseif action == "toggle_chat" then
+      M.toggle_chat()
+    elseif action == "call_aider_plus" then
+      M.call_aider_plus()
     else
-      vim.notify("Invalid action for AiderPlus. Available actions: send_code, send_selection", vim.log.levels.ERROR)
+      vim.notify("Invalid action for AiderPlus. Available actions: send_code, send_selection, toggle_chat, call_aider_plus", vim.log.levels.ERROR)
     end
   end, {
     nargs = 1,
     complete = function()
-      return { "send_code", "send_selection" }
+      return { "send_code", "send_selection", "toggle_chat", "call_aider_plus" }
     end,
     desc = "Call Aider Plus functionality with specific action"
   })
