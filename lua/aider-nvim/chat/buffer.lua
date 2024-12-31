@@ -64,7 +64,7 @@ function M.create()
     local opts = last_window_config or {
         relative = "win",
         width = math.floor(vim.o.columns * 0.6),
-        height = 3,  -- Show 3 lines
+        height = 2,  -- Show 3 lines
         col = 0,
         row = 0,
         style = "minimal",
