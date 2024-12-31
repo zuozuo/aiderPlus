@@ -26,17 +26,7 @@ function M.setup_commands()
     if action == "send_code" then
       M.send_code()
     elseif action == "send_selection" then
-      -- Handle visual selection range
-      local start_line = opts.line1
-      local end_line = opts.line2
-      if start_line ~= end_line then
-        local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-        local content = table.concat(lines, "\n")
-        -- TODO: Send to Aider
-        vim.notify("Selection sent to Aider111", vim.log.levels.INFO)
-      else
-        M.send_selection()
-      end
+      M.send_selection()
     elseif action == "toggle_chat" then
       M.toggle_chat()
     elseif action == "call_aider_plus" then
