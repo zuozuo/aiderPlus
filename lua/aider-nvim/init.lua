@@ -162,9 +162,9 @@ function M.create_chat_window()
         vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
     end
 
-    -- Create small input window
+    -- Create scrollable chat window
     local width = math.floor(vim.o.columns * 0.6)
-    local height = 2  -- Only 2 lines for input
+    local height = 10  -- Show 10 lines
     -- Get cursor position
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     local win_height = vim.api.nvim_win_get_height(0)
@@ -183,6 +183,7 @@ function M.create_chat_window()
         row = row,
         style = "minimal",
         border = "rounded",
+        scrollable = true,
     }
 
     if not chat_win or not vim.api.nvim_win_is_valid(chat_win) then
@@ -192,12 +193,14 @@ function M.create_chat_window()
         vim.api.nvim_set_current_win(chat_win)
     end
 
-    -- Set window options for input
+    -- Set window options for scrollable chat
     vim.api.nvim_win_set_option(chat_win, "number", false)
     vim.api.nvim_win_set_option(chat_win, "relativenumber", false)
     vim.api.nvim_win_set_option(chat_win, "wrap", true)
-    vim.api.nvim_buf_set_option(chat_buf, "buftype", "prompt")
-    vim.fn.prompt_setprompt(chat_buf, "Aider> ")
+    vim.api.nvim_win_set_option(chat_win, "scrolloff", 2)  -- Keep 2 lines margin when scrolling
+    vim.api.nvim_buf_set_option(chat_buf, "buftype", "")
+    vim.api.nvim_buf_set_option(chat_buf, "modifiable", true)
+    vim.api.nvim_buf_set_option(chat_buf, "readonly", false)
 
     -- Set keymaps for the chat window
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
