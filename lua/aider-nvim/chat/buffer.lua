@@ -149,12 +149,19 @@ function M.close()
         original_cursor_pos = nil
         original_visual_selection = nil
         last_window_config = vim.api.nvim_win_get_config(chat_win)
+        
+        -- Force close the window
         vim.api.nvim_win_close(chat_win, true)
+        
         if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
             -- Remove the Enter key mapping before closing
             vim.api.nvim_buf_del_keymap(chat_buf, "i", "<CR>")
+            
+            -- Force delete the buffer without saving
+            vim.api.nvim_buf_set_option(chat_buf, "buftype", "nofile")
             vim.api.nvim_buf_delete(chat_buf, { force = true })
         end
+        
         chat_win = nil
         chat_buf = nil
         vim.cmd("stopinsert")
