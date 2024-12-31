@@ -5,13 +5,30 @@ local chat_win = nil
 local last_window_config = nil
 local original_buf = nil
 local original_cursor_pos = nil
+local original_visual_selection = nil
 
 function M.create()
     local config = require("aider-nvim.config").get()
     
-    -- Save original buffer and cursor position
+    -- Save original buffer, cursor position and visual selection
     original_buf = vim.api.nvim_get_current_buf()
     original_cursor_pos = vim.api.nvim_win_get_cursor(0)
+    
+    -- Save visual selection if in visual mode
+    local mode = vim.fn.mode()
+    if mode == "v" or mode == "V" then
+        local start_pos = vim.fn.getpos("'<")
+        local end_pos = vim.fn.getpos("'>")
+        local start_line = start_pos[2]
+        local end_line = end_pos[2]
+        original_visual_selection = {
+            start_line = start_line,
+            end_line = end_line,
+            content = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
+        }
+    else
+        original_visual_selection = nil
+    end
 
     -- Check if buffer with same name exists and delete it
     local existing_buf = vim.fn.bufnr("AiderPlus Chat")
@@ -121,6 +138,10 @@ end
 
 function M.get_original_cursor_pos()
     return original_cursor_pos
+end
+
+function M.get_original_visual_selection()
+    return original_visual_selection
 end
 
 return M

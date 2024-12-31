@@ -1,20 +1,20 @@
 local M = {}
 
 function M.get_visual_selection_range()
-    local start_pos = vim.fn.getpos("'<")
-    local end_pos = vim.fn.getpos("'>")
-
-    local start_line = start_pos[2]
-    local end_line = end_pos[2]
-
-    local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-    vim.notify(string.format("Selected lines: %d - %d", start_line, end_line), vim.log.levels.INFO)
-
-    return {
-        start_line = start_line,
-        end_line = end_line,
-        content = lines
-    }
+    local buffer = require("aider-nvim.chat.buffer")
+    local selection = buffer.get_original_visual_selection()
+    
+    if not selection then
+        return {
+            start_line = 0,
+            end_line = 0,
+            content = {}
+        }
+    end
+    
+    vim.notify(string.format("Selected lines: %d - %d", selection.start_line, selection.end_line), vim.log.levels.INFO)
+    
+    return selection
 end
 
 return M
