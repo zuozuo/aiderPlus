@@ -199,10 +199,10 @@ function M.toggle_chat()
         vim.api.nvim_win_close(chat_win, true)
         chat_win = nil
         vim.notify("Chat closed", vim.log.levels.INFO)
-    else
-        M.create_chat_window()
-        vim.notify("Chat opened", vim.log.levels.INFO)
+        return  -- 直接返回，不再创建新窗口
     end
+    M.create_chat_window()
+    vim.notify("Chat opened", vim.log.levels.INFO)
 end
 
 function M.call_aider_plus()
