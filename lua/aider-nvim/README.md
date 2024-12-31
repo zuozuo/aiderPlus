@@ -1,11 +1,14 @@
 # aider.nvim
 
-A Neovim plugin to enhance the Aider experience.
+A Neovim plugin to enhance the Aider experience with Floaterm integration.
 
 ## Features
 
-- Easy keybindings for sending code and selections
-- Toggleable chat window
+- Interactive chat window with Floaterm integration
+- Code context awareness with line numbers
+- Visual selection support
+- Quick command suggestions
+- Configurable Floaterm window settings
 - Automatic Aider process management
 
 ## Installation
@@ -15,17 +18,16 @@ Using packer.nvim:
 ```lua
 use {
   'your-username/aider.nvim',
+  requires = {
+    'voldikss/vim-floaterm'  -- Required dependency
+  },
   config = function()
     require('aider-nvim').setup({
       -- Configuration options
     })
-  end,
-  -- Ensure the plugin is loaded
-  after = "nvim-lspconfig"
+  end
 }
-
--- Note: Do not call setup() directly in the plugin code
--- The setup() function should only be called once in your configuration
+```
 
 Using lazy.nvim:
 
@@ -33,7 +35,7 @@ Using lazy.nvim:
 {
   "your-username/aider.nvim",
   dependencies = {
-    "nvim-lspconfig"
+    "voldikss/vim-floaterm"  -- Required dependency
   },
   config = function()
     require("aider-nvim").setup({
@@ -41,49 +43,56 @@ Using lazy.nvim:
     })
   end,
 }
-
--- Note: Do not call setup() directly in the plugin code
--- The setup() function should only be called once in your configuration
+```
 
 ## Configuration
 
 ```lua
 require('aider-nvim').setup({
-  auto_start = true,
-  prompt = "Send text to Aider:  ",  -- 自定义提示符
-  code_context_window = 2,          -- 获取光标上下2行代码作为上下文
-  quick_commands = {                -- 自定义快速命令
+  auto_start = true,               -- Automatically start Aider when Neovim loads
+  prompt = "Send text to Aider:  ",  -- Custom prompt text
+  code_context_window = 2,         -- Number of lines above/below cursor to include as context
+  quick_commands = {               -- Custom quick commands
     "/explain this",
     "/fix that", 
     "/refactor this",
     "/add comments"
   },
   keybindings = {
-    send_code = "<leader>ac",       -- 发送当前buffer内容
-    send_selection = "<leader>as",  -- 发送选中内容
-    toggle_chat = "<leader>at",     -- 切换聊天窗口
-    call_aider_plus = "<leader>ap", -- 调用Aider Plus功能
-  }
+    send_code = "<leader>ac",      -- Send current buffer content
+    send_selection = "<leader>as", -- Send visual selection
+    toggle_chat = "<D-k>",         -- Toggle chat window (Cmd-K on macOS)
+    call_aider_plus = "<leader>ap",-- Call Aider Plus functionality
+  },
+  floaterm_command = "FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 aider"
 })
 ```
 
-### 快速命令
-在聊天窗口中输入`/`可以触发快速命令补全，默认包含：
-- `/explain this` - 解释代码
-- `/fix that` - 修复代码
-- `/refactor this` - 重构代码
-- `/add comments` - 添加注释
+### Quick Commands
+Type `/` in the chat window to trigger quick command completion. Default commands include:
+- `/explain this` - Explain the code
+- `/fix that` - Fix issues in the code
+- `/refactor this` - Refactor the code
+- `/add comments` - Add comments to the code
 
-你可以通过`quick_commands`配置项自定义快速命令列表。
+Customize the quick commands list using the `quick_commands` configuration option.
 
-### 窗口布局
-聊天窗口会自动对齐到代码的缩进位置，并留有4字符的左边距，确保与代码保持视觉一致性。
+### Window Layout
+The chat window:
+- Automatically aligns with code indentation
+- Maintains a 4-character left margin for visual consistency
+- Uses a floating window design that follows cursor movement
+
+The Floaterm window:
+- Opens as a vertical split (40% width by default)
+- Can be customized via the `floaterm_command` configuration
+- Persists between chat sessions
 
 ## Keybindings
 
 - `<leader>ac` - Send current buffer content to Aider
 - `<leader>as` - Send visual selection to Aider
-- `<leader>at` - Toggle Aider chat window
+- `<D-k>` (Cmd-K) - Toggle Aider chat window
 - `<leader>ap` - Call Aider Plus functionality
 
 ## Aider Plus
@@ -97,6 +106,7 @@ The `call_aider_plus` function provides extended Aider capabilities. You can cal
 :AiderPlus send_selection
 :AiderPlus toggle_chat
 :AiderPlus call_aider_plus
+:AiderPlus start
 ```
 3. Direct Lua call:
 ```lua
@@ -111,3 +121,20 @@ require('aider-nvim').setup({
   }
 })
 ```
+
+## Floaterm Integration
+
+The plugin integrates with vim-floaterm to provide a persistent terminal window for Aider. Key features:
+
+- Dedicated terminal window named "AiderPlus-Chat"
+- Configurable window position and size
+- Automatic window management
+- Persistent terminal session
+
+Customize the Floaterm window using the `floaterm_command` configuration option. Example:
+
+```lua
+floaterm_command = "FloatermNew --name=AiderPlus-Chat --wintype=split --height=0.3 --position=bottom aider"
+```
+
+This would create a horizontal split at the bottom taking up 30% of the window height.
