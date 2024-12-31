@@ -86,9 +86,13 @@ function M.get_code_context()
     local start_line = math.max(1, current_line - config.code_context_window)
     local end_line = current_line + config.code_context_window
     
-    -- 获取代码
+    -- 获取代码并添加行号
     local lines = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
-    return table.concat(lines, "\n")
+    local numbered_lines = {}
+    for i, line in ipairs(lines) do
+        table.insert(numbered_lines, string.format("%d: %s", start_line + i - 1, line))
+    end
+    return table.concat(numbered_lines, "\n")
 end
 
 function M.submit_and_close()
