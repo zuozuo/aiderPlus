@@ -39,42 +39,30 @@ function M.submit(context)
             -- 如果存在则显示窗口
             vim.fn["floaterm#terminal#open_existing"](term_bufnr)
         else
-            -- 检查 floaterm 是否加载
-            if vim.fn.exists("*floaterm#terminal#open") == 0 then
-                vim.notify("Floaterm plugin not loaded", vim.log.levels.ERROR)
-                return
-            end
+            vim.notify("AiderPlus-Chat terminal not found, please create a new one", vim.log.levels.INFO)
+            -- -- 如果不存在则创建新的 floaterm 窗口
+            -- local success, result = pcall(function()
+            --     local cmd = "FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 zsh"
+            --     local result = vim.cmd("FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 zsh")
+            -- end)
 
-            -- 如果不存在则创建新的 floaterm 窗口
-            local success, result = pcall(function()
-                return vim.fn["floaterm#terminal#open"](-1, "zsh", {}, {
-                    name = "AiderPlus-Chat",
-                    wintype = "split",
-                    width = 0.5,
-                    height = 0.5,
-                    position = "bottom",
-                    autoclose = 0,
-                    title = "AiderPlus-Chat"
-                })
-            end)
+            -- if not success then
+            --     vim.notify("Floaterm error: " .. tostring(result), vim.log.levels.ERROR)
+            --     return
+            -- end
 
-            if not success then
-                vim.notify("Floaterm error: " .. tostring(result), vim.log.levels.ERROR)
-                return
-            end
+            -- term_bufnr = result
+            -- 
+            -- if term_bufnr == -1 then
+            --     vim.notify("Failed to create AiderPlus-Chat terminal (returned -1)", vim.log.levels.ERROR)
+            --     return
+            -- end
 
-            term_bufnr = result
-            
-            if term_bufnr == -1 then
-                vim.notify("Failed to create AiderPlus-Chat terminal (returned -1)", vim.log.levels.ERROR)
-                return
-            end
-
-            -- 验证终端是否创建成功
-            if not vim.api.nvim_buf_is_valid(term_bufnr) then
-                vim.notify("Created terminal buffer is invalid", vim.log.levels.ERROR)
-                return
-            end
+            -- -- 验证终端是否创建成功
+            -- if not vim.api.nvim_buf_is_valid(term_bufnr) then
+            --     vim.notify("Created terminal buffer is invalid", vim.log.levels.ERROR)
+            --     return
+            -- end
         end
 
         -- 将输入发送到 floaterm
