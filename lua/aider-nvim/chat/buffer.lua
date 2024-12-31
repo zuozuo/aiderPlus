@@ -10,26 +10,27 @@ local original_visual_selection = nil
 function M.create()
     local config = require("aider-nvim.config").get()
     
-    -- Save original buffer, cursor position and visual selection
+    -- Save original buffer and cursor position
     original_buf = vim.api.nvim_get_current_buf()
     original_cursor_pos = vim.api.nvim_win_get_cursor(0)
     
-    -- Save visual selection if in visual mode
-    local mode = vim.fn.mode()
-    if mode == "v" or mode == "V" then
-        vim.notify("in visual mode: " .. mode, vim.log.levels.INFO)
-        local start_pos = vim.fn.getpos("'<")
-        local end_pos = vim.fn.getpos("'>")
-        local start_line = start_pos[2]
-        local end_line = end_pos[2]
+    -- Save visual selection before mode changes
+    local start_pos = vim.fn.getpos("'<")
+    local end_pos = vim.fn.getpos("'>")
+    local start_line = start_pos[2]
+    local end_line = end_pos[2]
+    
+    -- Check if there's an actual selection (start and end positions differ)
+    if start_line ~= end_line or start_pos[3] ~= end_pos[3] then
         original_visual_selection = {
             start_line = start_line,
             end_line = end_line,
             content = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
         }
+        vim.notify(string.format("Saved visual selection: %d - %d", start_line, end_line), vim.log.levels.INFO)
     else
-        vim.notify("not in visual mode: " .. mode, vim.log.levels.INFO)
         original_visual_selection = nil
+        vim.notify("No visual selection found", vim.log.levels.INFO)
     end
 
     vim.notify("original_visual_selection: " .. tostring(original_visual_selection), vim.log.levels.INFO)
