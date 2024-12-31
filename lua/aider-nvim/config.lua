@@ -13,7 +13,7 @@ M.default_config = {
     keybindings = {
         send_code = "<leader>ac",
         send_selection = "<leader>as",
-        toggle_chat = "<leader>at",
+        toggle_chat = "<D-k>",
         call_aider_plus = "<leader>ap",
     },
 }
