@@ -39,7 +39,13 @@ function M.submit(context)
         end
 
         -- 将输入发送到 floaterm
-        -- Send context first if it exists
+        -- Get current file path and send it first
+        local file_path = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+        if file_path and #file_path > 0 then
+            vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. file_path})
+        end
+
+        -- Then send context if it exists
         if context and #context > 0 then
             vim.fn["floaterm#terminal#send"](term_bufnr, {context})
         end
