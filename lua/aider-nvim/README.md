@@ -19,7 +19,9 @@ use {
     require('aider-nvim').setup({
       -- Configuration options
     })
-  end
+  end,
+  -- Ensure the plugin is loaded
+  after = "nvim-lspconfig"
 }
 ```
 

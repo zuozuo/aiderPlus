@@ -20,6 +20,9 @@ function M.setup(user_config)
   end
 end
 
+-- Ensure commands are available when plugin is loaded
+M.setup()
+
 function M.setup_commands()
   vim.api.nvim_create_user_command("AiderPlus", function(opts)
     local action = opts.fargs[1]
