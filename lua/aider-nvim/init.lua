@@ -230,15 +230,20 @@ end
 
 function M.submit_and_close()
     if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
-        -- Get all lines from buffer
-        local lines = vim.api.nvim_buf_get_lines(chat_buf, 0, -1, false)
-        -- Remove the prompt line
-        table.remove(lines, 1)
-        -- Join lines into a single string
-        local input = table.concat(lines, "\n")
+        -- Get the current line
+        local cursor_pos = vim.api.nvim_win_get_cursor(chat_win)
+        local line = vim.api.nvim_buf_get_lines(chat_buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
+        
+        -- Extract input after the prompt
+        local prompt = "Send text to Aider:  "
+        local input = string.sub(line, #prompt + 1)
         
         -- TODO: Process the input (send to Aider, etc.)
-        vim.notify("Input submitted: " .. input, vim.log.levels.INFO)
+        if input and #input > 0 then
+            vim.notify("Input submitted: " .. input, vim.log.levels.INFO)
+        else
+            vim.notify("No input provided", vim.log.levels.WARN)
+        end
         
         -- Close the chat window
         M.toggle_chat()
