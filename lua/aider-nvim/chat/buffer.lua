@@ -72,7 +72,7 @@ function M.create()
     }
 
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
-    opts.col = vim.fn.indent(cursor_pos[1])  -- Align with buffer's text start
+    opts.col = vim.fn.indent(cursor_pos[1]) + 10  -- Align with buffer's text start plus 10 chars margin
     opts.row = cursor_pos[1] - vim.fn.line('w0') + 1  -- Calculate relative row position
 
     if not chat_win or not vim.api.nvim_win_is_valid(chat_win) then
