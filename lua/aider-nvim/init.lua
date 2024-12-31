@@ -205,7 +205,9 @@ function M.create_chat_window()
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "<ESC>", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
     
-    -- Enter insert mode automatically
+    -- Add prompt and enter insert mode
+    vim.api.nvim_buf_set_lines(chat_buf, 0, -1, false, {"Aider: "})
+    vim.api.nvim_win_set_cursor(chat_win, {1, #"Aider: "})
     vim.cmd("startinsert")
 end
 
