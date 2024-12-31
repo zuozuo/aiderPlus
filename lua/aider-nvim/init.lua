@@ -91,26 +91,6 @@ local function get_visual_selection_range()
     }
 end
 
-local function send_to_aider(text)
-    if not text or text == "" then
-        vim.notify("No text to send to Aider", vim.log.levels.WARN)
-        return
-    end
-    
-    -- Check if Floaterm command exists
-    if vim.fn.exists(":FloatermSend") ~= 2 then
-        vim.notify("Floaterm is not available. Please install and configure Floaterm first.", vim.log.levels.ERROR)
-        return
-    end
-    
-    -- Add Aider command prefix if needed
-    local command = text
-
-    -- Send to Floaterm using command
-    vim.cmd("FloatermSend " .. vim.fn.shellescape(command))
-    vim.notify("Text sent to Aider", vim.log.levels.INFO)
-end
-
 function M.send_selection()
     local buf = vim.api.nvim_get_current_buf()
     if not vim.api.nvim_buf_is_valid(buf) then
@@ -134,13 +114,16 @@ function M.send_selection()
     local line1 = selection.start_line
     local line2 = selection.end_line
 
-    vim.notify("Line1: " .. line1 .. ", Line2: " .. line2, vim.log.levels.INFO)
     -- If we have a range (from command mode) and it's valid
     if line1 > 0 and line2 > 0 and line1 ~= line2 then
         local lines = vim.api.nvim_buf_get_lines(buf, line1 - 1, line2, false)
         content = table.concat(lines, "\n")
-        vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
-        send_to_aider(content)
+        -- vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
+        vim.notify("=========================================")
+        local cmd = line1 .. "," .. line2 .. "FloatermSend"
+        vim.notify(cmd, vim.log.levels.INFO)
+        vim.cmd(cmd)
+        -- send_to_aider(content)
         return
     end
 
@@ -161,7 +144,7 @@ function M.send_selection()
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     local line = vim.api.nvim_buf_get_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
     content = line
-    vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
+    -- vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
     send_to_aider(content)
 end
 
