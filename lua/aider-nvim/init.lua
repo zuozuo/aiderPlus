@@ -53,7 +53,25 @@ function M.toggle_chat()
     chat.toggle()
 end
 
+function M.get_code_context()
+    local config = require("aider-nvim.config").get()
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local current_line = cursor_pos[1]
+    local buf = vim.api.nvim_get_current_buf()
+    
+    -- 计算上下行范围
+    local start_line = math.max(1, current_line - config.code_context_window)
+    local end_line = current_line + config.code_context_window
+    
+    -- 获取代码
+    local lines = vim.api.nvim_buf_get_lines(buf, start_line - 1, end_line, false)
+    return table.concat(lines, "\n")
+end
+
 function M.submit_and_close()
+    local context = M.get_code_context()
+    -- 这里可以添加对上下文的处理逻辑
+    vim.notify("Code context:\n" .. context, vim.log.levels.INFO)
     chat.submit()
 end
 
