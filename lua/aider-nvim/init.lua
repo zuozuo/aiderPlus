@@ -56,6 +56,7 @@ end
 function M.get_code_context()
     local config = require("aider-nvim.config").get()
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    vim.notify("cursor_pos: " .. cursor_pos[1] .. " " .. cursor_pos[2], vim.log.levels.INFO)
     local current_line = cursor_pos[1]
     local buf = vim.api.nvim_get_current_buf()
     
