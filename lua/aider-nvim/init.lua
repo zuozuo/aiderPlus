@@ -128,10 +128,25 @@ function M.submit_and_close()
         combined = combined .. "Code context:\n" .. context
     end
     
-    if #combined > 0 then
+    -- Get user input from chat buffer
+    local chat_buf = require("aider-nvim.chat.buffer").get_buf()
+    local input = ""
+    if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
+        local lines = vim.api.nvim_buf_get_lines(chat_buf, 0, -1, false)
+        local config = require("aider-nvim.config").get()
+        -- Remove prompt and get user input
+        if lines[1] and lines[1]:find("^" .. vim.pesc(config.prompt)) then
+            input = string.sub(lines[1], #config.prompt + 1)
+        end
+    end
+
+    if #combined > 0 or #input > 0 then
+        if #input > 0 then
+            combined = combined .. "\nUser Requirement: " .. input
+        end
         chat.submit(combined)
     else
-        vim.notify("No code context found", vim.log.levels.WARN)
+        vim.notify("No code context or input found", vim.log.levels.WARN)
     end
 end
 
