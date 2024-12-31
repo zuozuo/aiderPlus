@@ -35,25 +35,39 @@ function M.submit(context)
         -- 检查是否存在名为 AiderPlus-Chat 的 floaterm 窗口
         local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
 
-        if term_bufnr ~= -1 then
-            -- 如果存在则显示窗口
-            vim.fn["floaterm#terminal#open_existing"](term_bufnr)
-        else
-            -- 如果不存在则创建新的 floaterm 窗口
-            term_bufnr = vim.fn["floaterm#terminal#open"](-1, "zsh", {}, {
-                name = "AiderPlus-Chat",
-                wintype = "split",
-                width = 0.5,
-                height = 0.5,
-                position = "bottom",
-                autoclose = 0,
-                title = "AiderPlus-Chat"
-            })
-            
-            if term_bufnr == -1 then
-                vim.notify("Failed to create AiderPlus-Chat terminal", vim.log.levels.ERROR)
-                return
+        -- Try using floaterm first
+        local floaterm_success = pcall(function()
+            if term_bufnr ~= -1 then
+                -- 如果存在则显示窗口
+                vim.fn["floaterm#terminal#open_existing"](term_bufnr)
+            else
+                -- 如果不存在则创建新的 floaterm 窗口
+                term_bufnr = vim.fn["floaterm#terminal#open"](-1, "zsh", {}, {
+                    name = "AiderPlus-Chat",
+                    wintype = "split",
+                    width = 0.5,
+                    height = 0.5,
+                    position = "bottom",
+                    autoclose = 0,
+                    title = "AiderPlus-Chat"
+                })
+                
+                if term_bufnr == -1 then
+                    error("Failed to create AiderPlus-Chat terminal")
+                end
             end
+        end)
+        
+        -- Fallback to Neovim's built-in terminal if floaterm fails
+        if not floaterm_success then
+            vim.notify("Floaterm not available, using Neovim terminal", vim.log.levels.WARN)
+            -- Create new terminal buffer
+            vim.cmd("botright split | terminal")
+            term_bufnr = vim.api.nvim_get_current_buf()
+            -- Set buffer name
+            vim.api.nvim_buf_set_name(term_bufnr, "AiderPlus-Chat")
+            -- Enter terminal mode
+            vim.cmd("startinsert")
         end
 
         -- 将输入发送到 floaterm
