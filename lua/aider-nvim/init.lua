@@ -91,8 +91,18 @@ local function get_visual_selection_range()
     }
 end
 
-local function send_to_floaterm(text)
-    vim.fn.FloatermSend(text)
+local function send_to_aider(text)
+    if not text or text == "" then
+        vim.notify("No text to send to Aider", vim.log.levels.WARN)
+        return
+    end
+    
+    -- Add Aider command prefix if needed
+    local command = text
+    
+    -- Send to Floaterm
+    vim.fn.FloatermSend(command)
+    vim.notify("Text sent to Aider", vim.log.levels.INFO)
 end
 
 function M.send_selection()
@@ -124,8 +134,7 @@ function M.send_selection()
         local lines = vim.api.nvim_buf_get_lines(buf, line1 - 1, line2, false)
         content = table.concat(lines, "\n")
         vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
-        -- TODO: Send to Aider
-        vim.notify("Selection sent to Aider", vim.log.levels.INFO)
+        send_to_aider(content)
         return
     end
 
@@ -137,8 +146,7 @@ function M.send_selection()
             local lines = vim.api.nvim_buf_get_lines(buf, start_pos[1] - 1, end_pos[1], false)
             content = table.concat(lines, "\n")
             vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
-            -- TODO: Send to Aider
-            vim.notify("Selection sent to Aider", vim.log.levels.INFO)
+            send_to_aider(content)
             return
         end
     end
@@ -148,8 +156,7 @@ function M.send_selection()
     local line = vim.api.nvim_buf_get_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
     content = line
     vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
-    -- TODO: Send to Aider
-    vim.notify("Current line sent to Aider", vim.log.levels.INFO)
+    send_to_aider(content)
 end
 
 function M.toggle_chat()
