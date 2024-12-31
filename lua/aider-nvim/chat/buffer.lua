@@ -79,6 +79,8 @@ function M.close()
         last_window_config = vim.api.nvim_win_get_config(chat_win)
         vim.api.nvim_win_close(chat_win, true)
         if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
+            -- Remove the Enter key mapping before closing
+            vim.api.nvim_buf_del_keymap(chat_buf, "i", "<CR>")
             vim.api.nvim_buf_delete(chat_buf, { force = true })
         end
         chat_win = nil
