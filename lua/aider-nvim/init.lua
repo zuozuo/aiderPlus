@@ -165,12 +165,22 @@ function M.create_chat_window()
     -- Create small input window
     local width = math.floor(vim.o.columns * 0.6)
     local height = 2  -- Only 2 lines for input
+    -- Get cursor position
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local win_height = vim.api.nvim_win_get_height(0)
+    
+    -- Calculate window position
+    local row = cursor_pos[1] + 1  -- Position below cursor
+    if row + height > win_height then
+        row = cursor_pos[1] - height - 1  -- Move above if not enough space below
+    end
+    
     local opts = {
-        relative = "editor",
+        relative = "win",
         width = width,
         height = height,
         col = (vim.o.columns - width) / 2,
-        row = vim.o.lines - height - 5,  -- Position near bottom
+        row = row,
         style = "minimal",
         border = "rounded",
     }
