@@ -10,8 +10,8 @@ local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
 -- Define highlight group for smaller ghost text
 vim.api.nvim_set_hl(0, "AiderGhostText", {
-    ctermfg = "Gray",
-    fg = "#808080",
+    ctermfg = "DarkGray",
+    fg = "#404040",  -- 更暗的灰色
     italic = true,
     default = true
 })
