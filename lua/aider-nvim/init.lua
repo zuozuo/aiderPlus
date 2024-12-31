@@ -215,6 +215,7 @@ function M.toggle_chat()
         end
         chat_win = nil
         chat_buf = nil
+        vim.cmd("stopinsert")  -- 确保关闭窗口后进入 normal 模式
         vim.notify("Chat closed", vim.log.levels.INFO)
         return
     end
