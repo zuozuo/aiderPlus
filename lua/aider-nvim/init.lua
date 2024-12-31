@@ -55,17 +55,24 @@ end
 
 function M.get_code_context()
     local config = require("aider-nvim.config").get()
-    local cursor_pos = vim.api.nvim_win_get_cursor(0)
-    vim.notify("cursor_pos: " .. cursor_pos[1] .. " " .. cursor_pos[2], vim.log.levels.INFO)
-    local current_line = cursor_pos[1]
-    local buf = vim.api.nvim_get_current_buf()
+    local buffer = require("aider-nvim.chat.buffer")
+    
+    -- Get original buffer and cursor position
+    local original_buf = buffer.get_original_buf()
+    local original_cursor_pos = buffer.get_original_cursor_pos()
+    
+    if not original_buf or not original_cursor_pos then
+        return ""
+    end
+    
+    local current_line = original_cursor_pos[1]
     
     -- 计算上下行范围
     local start_line = math.max(1, current_line - config.code_context_window)
     local end_line = current_line + config.code_context_window
     
     -- 获取代码
-    local lines = vim.api.nvim_buf_get_lines(buf, start_line - 1, end_line, false)
+    local lines = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
     return table.concat(lines, "\n")
 end
 

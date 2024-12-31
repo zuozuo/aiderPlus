@@ -3,9 +3,15 @@ local M = {}
 local chat_buf = nil
 local chat_win = nil
 local last_window_config = nil
+local original_buf = nil
+local original_cursor_pos = nil
 
 function M.create()
     local config = require("aider-nvim.config").get()
+    
+    -- Save original buffer and cursor position
+    original_buf = vim.api.nvim_get_current_buf()
+    original_cursor_pos = vim.api.nvim_win_get_cursor(0)
 
     -- Check if buffer with same name exists and delete it
     local existing_buf = vim.fn.bufnr("AiderPlus Chat")
@@ -76,6 +82,9 @@ end
 
 function M.close()
     if chat_win and vim.api.nvim_win_is_valid(chat_win) then
+        -- Clear saved positions
+        original_buf = nil
+        original_cursor_pos = nil
         last_window_config = vim.api.nvim_win_get_config(chat_win)
         vim.api.nvim_win_close(chat_win, true)
         if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
@@ -99,6 +108,14 @@ end
 
 function M.get_buf()
     return chat_buf
+end
+
+function M.get_original_buf()
+    return original_buf
+end
+
+function M.get_original_cursor_pos()
+    return original_cursor_pos
 end
 
 return M
