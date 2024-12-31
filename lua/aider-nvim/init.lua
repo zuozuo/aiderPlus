@@ -15,22 +15,12 @@ function M.setup(user_config)
   config = vim.tbl_deep_extend("force", config, user_config or {})
   M.setup_keybindings()
   M.setup_commands()
-  
-  -- 设置 autocmd 在成功保存 Lua 文件后重新加载 AiderPlus
-  vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*.lua",
-    callback = function()
-      vim.schedule(function()
-        vim.cmd("Lazy reload AiderPlus")
-      end)
-    end,
-    desc = "Reload AiderPlus after successfully saving Lua files"
-  })
 
   if config.auto_start then
     M.start_aider()
   end
 end
+
 
 function M.setup_commands()
   vim.api.nvim_create_user_command("AiderPlus", function(opts)
@@ -79,8 +69,28 @@ function M.send_code()
   end
 end
 
+-- 获取可视模式选择区域的范围
+local function get_visual_selection_range()
+  -- 获取可视模式的开始标记 '<
+  local start_pos = vim.fn.getpos("'<")
+  -- 获取可视模式的结束标记 '>
+  local end_pos = vim.fn.getpos("'>")
+
+  -- 提取行号
+  local start_line = start_pos[2]
+  local end_line = end_pos[2]
+
+  -- 获取选中的文本内容
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+
+  return {
+    start_line = start_line,
+    end_line = end_line,
+    content = lines
+  }
+end
+
 function M.send_selection()
-  vim.notify("==============111=======================", vim.log.levels.INFO)
   local buf = vim.api.nvim_get_current_buf()
   if not vim.api.nvim_buf_is_valid(buf) then
     vim.notify("Invalid buffer", vim.log.levels.ERROR)
@@ -90,10 +100,19 @@ function M.send_selection()
   local content = ""
   local mode = vim.fn.mode()
   
-  -- Check if we have a range from command mode
-  local line1 = vim.v.lnum1 or 0
-  local line2 = vim.v.lnum2 or 0
-  
+  local selection = get_visual_selection_range()
+  -- 打印选择范围信息，用于调试
+  print(string.format("Selection range: %d-%d", selection.start_line, selection.end_line))
+
+  -- 这里可以添加处理选中内容的逻辑
+  -- 例如:打印选中的内容
+  for i, line in ipairs(selection.content) do
+    print(string.format("Line %d: %s", selection.start_line + i - 1, line))
+  end
+
+  local line1 = selection.start_line
+  local line2 = selection.end_line
+
   vim.notify("Line1: " .. line1 .. ", Line2: " .. line2, vim.log.levels.INFO)
   -- If we have a range (from command mode) and it's valid
   if line1 > 0 and line2 > 0 and line1 ~= line2 then
