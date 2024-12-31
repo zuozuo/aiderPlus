@@ -75,6 +75,7 @@ function M.create()
     
     -- Set up keymap for Enter key to submit
     vim.api.nvim_buf_set_keymap(chat_buf, "i", "<CR>", "<cmd>lua require('aider-nvim').submit_and_close()<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(chat_buf, "n", "<CR>", "<cmd>lua require('aider-nvim').submit_and_close()<CR>", {noremap = true, silent = true})
     
     vim.cmd("startinsert")
     vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt})
