@@ -8,6 +8,14 @@ local original_cursor_pos = nil
 local original_visual_selection = nil
 local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
+-- 定义快捷命令列表
+local quick_commands = {
+    "/explain this",
+    "/fix that", 
+    "/refactor this",
+    "/add comments"
+}
+
 function M.create()
     local config = require("aider-nvim.config").get()
     
@@ -126,6 +134,12 @@ function M.create()
         hl_mode = "combine",
         priority = 10
     })
+
+    -- 设置自动补全
+    vim.api.nvim_buf_set_option(chat_buf, "completefunc", "v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands")
+    
+    -- 监听/键输入
+    vim.api.nvim_buf_set_keymap(chat_buf, "i", "/", "<cmd>call complete(col('.'), v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands())<CR>", {noremap = true, silent = true})
 end
 
 function M.close()
@@ -169,6 +183,21 @@ end
 
 function M.get_original_visual_selection()
     return original_visual_selection
+end
+
+-- 自动补全函数
+function M.complete_quick_commands()
+    local line = vim.api.nvim_get_current_line()
+    local prefix = line:match(".*/(.*)") or ""
+    
+    local matches = {}
+    for _, cmd in ipairs(quick_commands) do
+        if cmd:lower():find(prefix:lower(), 1, true) then
+            table.insert(matches, {word = cmd, kind = "Quick Command"})
+        end
+    end
+    
+    return matches
 end
 
 return M
