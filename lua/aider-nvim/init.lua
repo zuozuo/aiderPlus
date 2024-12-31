@@ -56,6 +56,7 @@ end
 function M.get_visual_selection()
     local mode = vim.fn.mode()
     if mode ~= "v" and mode ~= "V" then
+        vim.notify("Not in visual mode", vim.log.levels.WARN)
         return ""
     end
     
@@ -64,6 +65,7 @@ function M.get_visual_selection()
     
     local start_line = start_pos[2]
     local end_line = end_pos[2]
+    vim.notify(string.format("Selected lines11111: %d - %d", start_line, end_line), vim.log.levels.INFO)
     
     local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
     
