@@ -170,16 +170,14 @@ function M.create_chat_window()
     local win_height = vim.api.nvim_win_get_height(0)
     
     -- Calculate window position
-    local row = cursor_pos[1] + 1  -- Position below cursor
-    if row + height > win_height then
-        row = cursor_pos[1] - height - 1  -- Move above if not enough space below
-    end
+    local row = cursor_pos[1]  -- Use cursor's current row
+    local col = 0  -- Align with left edge of screen
     
     local opts = {
         relative = "win",
         width = width,
         height = height,
-        col = (vim.o.columns - width) / 2,
+        col = col,
         row = row,
         style = "minimal",
         border = "rounded",
