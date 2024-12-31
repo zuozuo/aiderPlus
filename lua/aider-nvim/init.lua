@@ -189,6 +189,7 @@ function M.create_chat_window()
 
     -- Set keymaps for the chat window
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(chat_buf, "n", "<ESC>", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
 end
 
 function M.toggle_chat()
