@@ -156,12 +156,16 @@ function M.send_selection()
 end
 
 function M.create_chat_window()
-    -- Create new buffer if not exists
-    if not chat_buf or not vim.api.nvim_buf_is_valid(chat_buf) then
-        chat_buf = vim.api.nvim_create_buf(false, true)
-        vim.api.nvim_buf_set_name(chat_buf, "AiderPlus Chat")
-        vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
+    -- Check if buffer with same name exists and delete it
+    local existing_buf = vim.fn.bufnr("AiderPlus Chat")
+    if existing_buf ~= -1 and vim.api.nvim_buf_is_valid(existing_buf) then
+        vim.api.nvim_buf_delete(existing_buf, { force = true })
     end
+
+    -- Create new buffer
+    chat_buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(chat_buf, "AiderPlus Chat")
+    vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
 
     -- Use last window config if available, otherwise create new one
     local opts = last_window_config or {
