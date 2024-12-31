@@ -15,6 +15,18 @@ function M.setup(user_config)
   config = vim.tbl_deep_extend("force", config, user_config or {})
   M.setup_keybindings()
   M.setup_commands()
+  
+  -- 设置 autocmd 在保存 Lua 文件时调用 Lazy
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*.lua",
+    callback = function()
+      if Lazy then
+        Lazy()
+      end
+    end,
+    desc = "Call Lazy after saving Lua files"
+  })
+
   if config.auto_start then
     M.start_aider()
   end
