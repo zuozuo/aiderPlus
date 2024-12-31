@@ -78,11 +78,11 @@ function M.send_selection()
   local mode = vim.fn.mode()
   
   -- Check if we have a range from command mode
-  local line1 = vim.v.lnum1
-  local line2 = vim.v.lnum2
+  local line1 = vim.v.lnum1 or 0
+  local line2 = vim.v.lnum2 or 0
   
-  -- If we have a range (from command mode)
-  if line1 ~= line2 then
+  -- If we have a range (from command mode) and it's valid
+  if line1 > 0 and line2 > 0 and line1 ~= line2 then
     local lines = vim.api.nvim_buf_get_lines(buf, line1 - 1, line2, false)
     content = table.concat(lines, "\n")
     vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
