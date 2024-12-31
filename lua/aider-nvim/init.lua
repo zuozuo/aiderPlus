@@ -171,7 +171,7 @@ function M.create_chat_window()
     
     -- Calculate window position
     local row = cursor_pos[1]  -- Use cursor's current row
-    local col = 0  -- Align with left edge of screen
+    local col = vim.fn.indent(cursor_pos[1])  -- Align with buffer's text start
     
     local opts = {
         relative = "win",
