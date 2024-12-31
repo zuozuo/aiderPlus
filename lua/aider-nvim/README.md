@@ -50,13 +50,34 @@ Using lazy.nvim:
 ```lua
 require('aider-nvim').setup({
   auto_start = true,
+  prompt = "Send text to Aider:  ",  -- 自定义提示符
+  code_context_window = 2,          -- 获取光标上下2行代码作为上下文
+  quick_commands = {                -- 自定义快速命令
+    "/explain this",
+    "/fix that", 
+    "/refactor this",
+    "/add comments"
+  },
   keybindings = {
-    send_code = "<leader>ac",
-    send_selection = "<leader>as",
-    toggle_chat = "<leader>at",
+    send_code = "<leader>ac",       -- 发送当前buffer内容
+    send_selection = "<leader>as",  -- 发送选中内容
+    toggle_chat = "<leader>at",     -- 切换聊天窗口
+    call_aider_plus = "<leader>ap", -- 调用Aider Plus功能
   }
 })
 ```
+
+### 快速命令
+在聊天窗口中输入`/`可以触发快速命令补全，默认包含：
+- `/explain this` - 解释代码
+- `/fix that` - 修复代码
+- `/refactor this` - 重构代码
+- `/add comments` - 添加注释
+
+你可以通过`quick_commands`配置项自定义快速命令列表。
+
+### 窗口布局
+聊天窗口会自动对齐到代码的缩进位置，并留有4字符的左边距，确保与代码保持视觉一致性。
 
 ## Keybindings
 
