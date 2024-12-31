@@ -63,7 +63,7 @@ function M.start()
 
     -- Create new floaterm window
     local create_success, create_result = pcall(function()
-        vim.cmd("FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 aider")
+        vim.cmd(config.get().floaterm_command)
     end)
 
     if not create_success then
