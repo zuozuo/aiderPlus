@@ -3,6 +3,7 @@ local M = {}
 -- Chat window state
 local chat_buf = nil
 local chat_win = nil
+local last_window_config = nil  -- Store last window position and size
 
 local config = {
     -- Default configuration options
@@ -162,26 +163,23 @@ function M.create_chat_window()
         vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
     end
 
-    -- Create scrollable chat window
-    local width = math.floor(vim.o.columns * 0.6)
-    local height = 3  -- Show 3 lines
-    -- Get cursor position
-    local cursor_pos = vim.api.nvim_win_get_cursor(0)
-    local win_height = vim.api.nvim_win_get_height(0)
-    
-    -- Calculate window position
-    local row = cursor_pos[1]  -- Use cursor's current row
-    local col = vim.fn.indent(cursor_pos[1])  -- Align with buffer's text start
-    
-    local opts = {
+    -- Use last window config if available, otherwise create new one
+    local opts = last_window_config or {
         relative = "win",
-        width = width,
-        height = height,
-        col = col,
-        row = row,
+        width = math.floor(vim.o.columns * 0.6),
+        height = 3,  -- Show 3 lines
+        col = 0,
+        row = 0,
         style = "minimal",
         border = "rounded",
     }
+
+    -- If no last config, position window based on cursor
+    if not last_window_config then
+        local cursor_pos = vim.api.nvim_win_get_cursor(0)
+        opts.col = vim.fn.indent(cursor_pos[1])  -- Align with buffer's text start
+        opts.row = cursor_pos[1]  -- Use cursor's current row
+    end
 
     if not chat_win or not vim.api.nvim_win_is_valid(chat_win) then
         chat_win = vim.api.nvim_open_win(chat_buf, true, opts)
@@ -211,6 +209,8 @@ end
 
 function M.toggle_chat()
     if chat_win and vim.api.nvim_win_is_valid(chat_win) then
+        -- Save window config before closing
+        last_window_config = vim.api.nvim_win_get_config(chat_win)
         vim.api.nvim_win_close(chat_win, true)
         if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
             vim.api.nvim_buf_delete(chat_buf, { force = true })
@@ -218,7 +218,7 @@ function M.toggle_chat()
         chat_win = nil
         chat_buf = nil
         vim.notify("Chat closed", vim.log.levels.INFO)
-        return  -- 直接返回，不再创建新窗口
+        return
     end
     M.create_chat_window()
     vim.notify("Chat opened", vim.log.levels.INFO)
