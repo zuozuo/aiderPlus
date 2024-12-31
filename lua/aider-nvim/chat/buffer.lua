@@ -17,6 +17,7 @@ function M.create()
     -- Save visual selection if in visual mode
     local mode = vim.fn.mode()
     if mode == "v" or mode == "V" then
+        vim.notify("in visual mode: " .. mode, vim.log.levels.INFO)
         local start_pos = vim.fn.getpos("'<")
         local end_pos = vim.fn.getpos("'>")
         local start_line = start_pos[2]
@@ -27,8 +28,11 @@ function M.create()
             content = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
         }
     else
+        vim.notify("not in visual mode: " .. mode, vim.log.levels.INFO)
         original_visual_selection = nil
     end
+
+    vim.notify("original_visual_selection: " .. tostring(original_visual_selection), vim.log.levels.INFO)
 
     -- Check if buffer with same name exists and delete it
     local existing_buf = vim.fn.bufnr("AiderPlus Chat")
