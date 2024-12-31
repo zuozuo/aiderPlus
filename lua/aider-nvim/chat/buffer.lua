@@ -11,10 +11,18 @@ local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
 -- Define highlight group for ghost text that appears after the prompt
 -- This text provides guidance about available commands and uses a subtle style
+-- The ghost text appears when the chat window is empty, showing quick commands
+-- and instructions for using the chat interface. The styling is designed to be:
+-- 1. Visible but not distracting (inherits Comment colors)
+-- 2. Clearly distinct from user input (italic style)
+-- 3. Consistent across different color schemes (default=true)
 vim.api.nvim_set_hl(0, "AiderGhostText", {
     link = "Comment",  -- Inherit color scheme from editor's comment style
+                       -- to ensure visibility while maintaining subtlety
     italic = true,     -- Use italic font for a softer, less intrusive appearance
-    default = true     -- Ensure this style is used by default
+                       -- that clearly distinguishes it from user input
+    default = true     -- Ensure this style is used by default across all
+                       -- color schemes for consistent user experience
 })
 
 -- This highlight group is used for the ghost text that appears after the prompt
