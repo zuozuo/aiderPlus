@@ -79,6 +79,7 @@ function M.create()
     
     -- Add 'q' key to close window in normal mode
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim.chat.buffer').close()<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(chat_buf, "n", "<ESC>", "<cmd>lua require('aider-nvim.chat.buffer').close()<CR>", {noremap = true, silent = true})
     
     vim.cmd("startinsert")
     vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt})
