@@ -24,7 +24,7 @@ end
 function M.send_code()
     local buf = vim.api.nvim_get_current_buf()
     if vim.api.nvim_buf_is_valid(buf) then
-        local content = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
+       local content = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
         -- TODO: Send to Aider
         vim.notify("Code sent to Aider", vim.log.levels.INFO)
     else

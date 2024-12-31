@@ -4,10 +4,8 @@ local buffer = require("aider-nvim.chat.buffer")
 function M.toggle()
     if buffer.is_open() then
         buffer.close()
-        vim.notify("Chat closed", vim.log.levels.INFO)
     else
         buffer.create()
-        vim.notify("Chat opened", vim.log.levels.INFO)
     end
 end
 
