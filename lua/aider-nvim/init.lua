@@ -162,15 +162,15 @@ function M.create_chat_window()
         vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
     end
 
-    -- Create floating window
-    local width = math.floor(vim.o.columns * 0.8)
-    local height = math.floor(vim.o.lines * 0.8)
+    -- Create small input window
+    local width = math.floor(vim.o.columns * 0.6)
+    local height = 2  -- Only 2 lines for input
     local opts = {
         relative = "editor",
         width = width,
         height = height,
         col = (vim.o.columns - width) / 2,
-        row = (vim.o.lines - height) / 2,
+        row = vim.o.lines - height - 5,  -- Position near bottom
         style = "minimal",
         border = "rounded",
     }
@@ -182,10 +182,12 @@ function M.create_chat_window()
         vim.api.nvim_set_current_win(chat_win)
     end
 
-    -- Set window options
-    vim.api.nvim_win_set_option(chat_win, "number", true)
-    vim.api.nvim_win_set_option(chat_win, "relativenumber", true)
+    -- Set window options for input
+    vim.api.nvim_win_set_option(chat_win, "number", false)
+    vim.api.nvim_win_set_option(chat_win, "relativenumber", false)
     vim.api.nvim_win_set_option(chat_win, "wrap", true)
+    vim.api.nvim_buf_set_option(chat_buf, "buftype", "prompt")
+    vim.fn.prompt_setprompt(chat_buf, "Aider> ")
 
     -- Set keymaps for the chat window
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
