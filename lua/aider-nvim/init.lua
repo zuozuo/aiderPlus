@@ -197,7 +197,7 @@ function M.create_chat_window()
     -- Set keymaps for the chat window
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "q", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "<ESC>", "<cmd>lua require('aider-nvim').toggle_chat()<CR>", {noremap = true, silent = true})
-    vim.api.nvim_buf_set_keymap(chat_buf, "i", "<S-CR>", "<cmd>lua require('aider-nvim').submit_and_close()<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(chat_buf, "i", "<CR>", "<cmd>lua require('aider-nvim').submit_and_close()<CR>", {noremap = true, silent = true})
     
     -- Add prompt and enter insert mode
     vim.api.nvim_buf_set_lines(chat_buf, 0, -1, false, {"Aider:  "})  -- 增加一个空格
