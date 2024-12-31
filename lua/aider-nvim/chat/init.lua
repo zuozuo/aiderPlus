@@ -15,8 +15,16 @@ function M.submit()
     if not buffer.is_open() then return end
 
     local config = require("aider-nvim.config").get()
-    local cursor_pos = vim.api.nvim_win_get_cursor(buffer.get_win())
-    local line = vim.api.nvim_buf_get_lines(buffer.get_buf(), cursor_pos[1] - 1, cursor_pos[1], false)[1]
+    local win = buffer.get_win()
+    local buf = buffer.get_buf()
+    
+    if not win or not vim.api.nvim_win_is_valid(win) or not buf or not vim.api.nvim_buf_is_valid(buf) then
+        vim.notify("Chat window is not valid", vim.log.levels.ERROR)
+        return
+    end
+    
+    local cursor_pos = vim.api.nvim_win_get_cursor(win)
+    local line = vim.api.nvim_buf_get_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false)[1] or ""
     
     local input = string.sub(line, #config.prompt + 1)
     

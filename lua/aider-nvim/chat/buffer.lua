@@ -93,4 +93,12 @@ function M.is_open()
     return chat_win and vim.api.nvim_win_is_valid(chat_win)
 end
 
+function M.get_win()
+    return chat_win
+end
+
+function M.get_buf()
+    return chat_buf
+end
+
 return M
