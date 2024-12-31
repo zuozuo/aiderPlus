@@ -106,9 +106,10 @@ end
 
 function M.close()
     if chat_win and vim.api.nvim_win_is_valid(chat_win) then
-        -- Clear saved positions
+        -- Clear saved positions and selection
         original_buf = nil
         original_cursor_pos = nil
+        original_visual_selection = nil
         last_window_config = vim.api.nvim_win_get_config(chat_win)
         vim.api.nvim_win_close(chat_win, true)
         if chat_buf and vim.api.nvim_buf_is_valid(chat_buf) then
