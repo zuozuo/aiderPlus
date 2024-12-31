@@ -34,7 +34,7 @@ function M.setup_commands()
             M.call_aider_plus()
         else
             vim.notify(
-            "Invalid action for AiderPlus. Available actions: send_code, send_selection, toggle_chat, call_aider_plus",
+                "Invalid action for AiderPlus. Available actions: send_code, send_selection, toggle_chat, call_aider_plus",
                 vim.log.levels.ERROR)
         end
     end, {
@@ -96,10 +96,9 @@ local function send_to_aider(text)
         vim.notify("No text to send to Aider", vim.log.levels.WARN)
         return
     end
-    
     -- Add Aider command prefix if needed
     local command = text
-    
+
     -- Send to Floaterm
     vim.fn.FloatermSend(command)
     vim.notify("Text sent to Aider", vim.log.levels.INFO)
