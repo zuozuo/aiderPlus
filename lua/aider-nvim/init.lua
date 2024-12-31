@@ -79,7 +79,14 @@ end
 
 function M.send_selection()
   local buf = vim.api.nvim_get_current_buf()
-  if vim.api.nvim_buf_is_valid(buf) then
+  if not vim.api.nvim_buf_is_valid(buf) then
+    vim.notify("Invalid buffer", vim.log.levels.ERROR)
+    return
+  end
+
+  -- Check if in visual mode
+  local mode = vim.fn.mode()
+  if mode == "v" or mode == "V" or mode == "\22" then  -- visual, linewise visual, blockwise visual
     local start_pos = vim.api.nvim_buf_get_mark(buf, "<")
     local end_pos = vim.api.nvim_buf_get_mark(buf, ">")
     if start_pos and end_pos then
@@ -87,12 +94,15 @@ function M.send_selection()
       local content = table.concat(lines, "\n")
       -- TODO: Send to Aider
       vim.notify("Selection sent to Aider", vim.log.levels.INFO)
-    else
-      vim.notify("No selection found", vim.log.levels.ERROR)
+      return
     end
-  else
-    vim.notify("Invalid buffer", vim.log.levels.ERROR)
   end
+
+  -- If not in visual mode, send current line
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local line = vim.api.nvim_buf_get_lines(buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
+  -- TODO: Send to Aider
+  vim.notify("Current line sent to Aider", vim.log.levels.INFO)
 end
 
 function M.toggle_chat()
