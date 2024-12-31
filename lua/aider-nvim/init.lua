@@ -236,7 +236,7 @@ function M.submit_and_close()
         
         -- Extract input after the prompt
         local prompt = "Send text to Aider:  "
-        local input = string.sub(line, #prompt + 1)
+        local input = string.sub(linek #prompt + 1)
         
         -- TODO: Process the input (send to Aider, etc.)
         if input and #input > 0 then
