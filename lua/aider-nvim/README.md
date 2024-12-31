@@ -25,6 +25,22 @@ use {
 }
 ```
 
+Using lazy.nvim:
+
+```lua
+{
+  "your-username/aider.nvim",
+  dependencies = {
+    "nvim-lspconfig"
+  },
+  config = function()
+    require("aider-nvim").setup({
+      -- Configuration options
+    })
+  end,
+}
+```
+
 ## Configuration
 
 ```lua
