@@ -7,6 +7,7 @@ local config = {
     send_code = "<leader>ac",
     send_selection = "<leader>as",
     toggle_chat = "<leader>at",
+    call_aider_plus = "<leader>ap",
   },
 }
 
@@ -22,6 +23,7 @@ function M.setup_keybindings()
   vim.keymap.set("n", config.keybindings.send_code, M.send_code, { desc = "Send code to Aider" })
   vim.keymap.set("v", config.keybindings.send_selection, M.send_selection, { desc = "Send selection to Aider" })
   vim.keymap.set("n", config.keybindings.toggle_chat, M.toggle_chat, { desc = "Toggle Aider chat" })
+  vim.keymap.set("n", config.keybindings.call_aider_plus, M.call_aider_plus, { desc = "Call Aider Plus" })
 end
 
 function M.start_aider()
@@ -49,6 +51,12 @@ end
 function M.toggle_chat()
   -- Toggle Aider chat window
   vim.notify("Chat toggled", vim.log.levels.INFO)
+end
+
+function M.call_aider_plus()
+  -- Call Aider Plus functionality
+  vim.notify("Aider Plus called", vim.log.levels.INFO)
+  -- TODO: Implement Aider Plus specific logic here
 end
 
 return M
