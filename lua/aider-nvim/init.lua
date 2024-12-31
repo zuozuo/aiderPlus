@@ -8,6 +8,7 @@ local last_window_config = nil  -- Store last window position and size
 local config = {
     -- Default configuration options
     auto_start = true,
+    prompt = "Send text to Aider:  ",
     keybindings = {
         send_code = "<leader>ac",
         send_selection = "<leader>as",
@@ -205,8 +206,8 @@ function M.create_chat_window()
     vim.api.nvim_buf_set_keymap(chat_buf, "n", "<CR>", "<cmd>lua require('aider-nvim').submit_and_close()<CR>", {noremap = true, silent = true})
     
     -- Add prompt and enter insert mode
-    vim.api.nvim_buf_set_lines(chat_buf, 0, -1, false, {"Send text to Aider:  "})  -- 增加一个空格
-    vim.api.nvim_win_set_cursor(chat_win, {1, #"Send text to Aider:  " + 1})  -- 将光标放在提示后
+    vim.api.nvim_buf_set_lines(chat_buf, 0, -1, false, {config.prompt})
+    vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt + 1})  -- 将光标放在提示后
     vim.cmd("startinsert")
 end
 
@@ -235,8 +236,7 @@ function M.submit_and_close()
         local line = vim.api.nvim_buf_get_lines(chat_buf, cursor_pos[1] - 1, cursor_pos[1], false)[1]
         
         -- Extract input after the prompt
-        local prompt = "Send text to Aider:  "
-        local input = string.sub(line, #prompt + 1)
+        local input = string.sub(line, #config.prompt + 1)
         
         -- TODO: Process the input (send to Aider, etc.)
         if input and #input > 0 then
