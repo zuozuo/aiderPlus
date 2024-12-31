@@ -57,11 +57,8 @@ function M.submit(context)
         end
     end
     
-    -- Switch back to original buffer
-    local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
-    if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
-        vim.api.nvim_set_current_buf(original_buf)
-    end
+    -- Switch back to original window using ctrl-w w
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>w", true, false, true), "n", true)
 end
 
 return M
