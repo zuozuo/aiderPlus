@@ -36,43 +36,12 @@ function M.submit(context)
             vim.fn["floaterm#terminal#open_existing"](term_bufnr)
         else
             vim.notify("AiderPlus-Chat terminal not found, please create a new one", vim.log.levels.INFO)
-            -- -- 如果不存在则创建新的 floaterm 窗口
-            -- local success, result = pcall(function()
-            --     local cmd = "FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 zsh"
-            --     local result = vim.cmd("FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 zsh")
-            -- end)
-
-            -- if not success then
-            --     vim.notify("Floaterm error: " .. tostring(result), vim.log.levels.ERROR)
-            --     return
-            -- end
-
-            -- term_bufnr = result
-            -- 
-            -- if term_bufnr == -1 then
-            --     vim.notify("Failed to create AiderPlus-Chat terminal (returned -1)", vim.log.levels.ERROR)
-            --     return
-            -- end
-
-            -- -- 验证终端是否创建成功
-            -- if not vim.api.nvim_buf_is_valid(term_bufnr) then
-            --     vim.notify("Created terminal buffer is invalid", vim.log.levels.ERROR)
-            --     return
-            -- end
         end
 
         -- 将输入发送到 floaterm
         -- Send context first if it exists
         if context and #context > 0 then
             vim.fn["floaterm#terminal#send"](term_bufnr, {context})
-        end
-        
-        -- Then send the input if it exists
-        if input and #input > 0 then
-            vim.fn["floaterm#terminal#send"](term_bufnr, {input})
-            vim.notify("Input submitted: " .. input, vim.log.levels.INFO)
-        elseif not (context and #context > 0) then
-            vim.notify("Empty input, nothing to send", vim.log.levels.WARN)
         end
     end
     M.toggle()
