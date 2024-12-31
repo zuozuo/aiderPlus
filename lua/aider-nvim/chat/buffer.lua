@@ -111,7 +111,7 @@ function M.create()
                 -- Re-add ghost text when input is cleared
                 local toggle_key = require("aider-nvim.config").get().keybindings.toggle_chat
                 vim.api.nvim_buf_set_extmark(chat_buf, ghost_text_ns, 0, #config.prompt, {
-                    virt_text = {{string.format("use / for commands, Enter to submit, %s to toggle", toggle_key), "AiderGhostText"}},
+                    virt_text = {{string.format("use / for quick commands, %s to toggle this, enter to submit", toggle_key), "AiderGhostText"}},
                     virt_text_pos = "eol",
                     hl_mode = "combine",
                     priority = 10
