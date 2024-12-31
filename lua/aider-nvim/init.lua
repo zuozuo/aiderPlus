@@ -54,25 +54,17 @@ function M.toggle_chat()
 end
 
 function M.get_visual_selection()
-    local mode = vim.fn.mode()
-    if mode ~= "v" and mode ~= "V" then
-        vim.notify("Not in visual mode", vim.log.levels.WARN)
+    local buffer = require("aider-nvim.chat.buffer")
+    local selection = buffer.get_original_visual_selection()
+    
+    if not selection then
         return ""
     end
     
-    local start_pos = vim.fn.getpos("'<")
-    local end_pos = vim.fn.getpos("'>")
-    
-    local start_line = start_pos[2]
-    local end_line = end_pos[2]
-    vim.notify(string.format("Selected lines11111: %d - %d", start_line, end_line), vim.log.levels.INFO)
-    
-    local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-    
     -- Add line numbers to each line
     local numbered_lines = {}
-    for i, line in ipairs(lines) do
-        table.insert(numbered_lines, string.format("%d: %s", start_line + i - 1, line))
+    for i, line in ipairs(selection.content) do
+        table.insert(numbered_lines, string.format("%d: %s", selection.start_line + i - 1, line))
     end
     
     return table.concat(numbered_lines, "\n")
