@@ -82,17 +82,20 @@ function M.create()
     -- Mark prompt as read-only
     vim.api.nvim_buf_add_highlight(chat_buf, -1, "Comment", 0, 0, #config.prompt)
     
-    -- Set up autocmd to protect prompt text and clear ghost text
+    -- Set up autocmd to protect prompt text
     vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP"}, {
         buffer = chat_buf,
         callback = function()
-            -- Clear ghost text if it exists
-            vim.api.nvim_buf_clear_namespace(chat_buf, ghost_text_ns, 0, -1)
-            
             local lines = vim.api.nvim_buf_get_lines(chat_buf, 0, 1, false)
             if not lines[1] or not lines[1]:find("^" .. vim.pesc(config.prompt)) then
                 vim.api.nvim_buf_set_lines(chat_buf, 0, 1, false, {config.prompt})
                 vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt + 1})
+            end
+            
+            -- Only clear ghost text if user has actually typed something
+            local content = vim.api.nvim_buf_get_lines(chat_buf, 0, -1, false)
+            if #content > 1 or (#content == 1 and #content[1] > #config.prompt) then
+                vim.api.nvim_buf_clear_namespace(chat_buf, ghost_text_ns, 0, -1)
             end
         end
     })
