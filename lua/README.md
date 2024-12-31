@@ -1,6 +1,6 @@
 # aider.nvim
 
-A Neovim plugin to enhance the Aider experience with Floaterm integration.
+A Neovim plugin to enhance the Aider experience with [Floaterm](https://github.com/voldikss/vim-floaterm) integration.
 
 ## Features
 
