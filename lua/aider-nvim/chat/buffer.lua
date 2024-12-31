@@ -14,6 +14,9 @@ function M.create()
     original_buf = vim.api.nvim_get_current_buf()
     original_cursor_pos = vim.api.nvim_win_get_cursor(0)
     
+    -- Clear previous selection
+    original_visual_selection = nil
+    
     -- Save visual selection before mode changes
     local start_pos = vim.fn.getpos("'<")
     local end_pos = vim.fn.getpos("'>")
@@ -27,9 +30,6 @@ function M.create()
             end_line = end_line,
             content = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
         }
-    else
-        original_visual_selection = nil
-        vim.notify("No visual selection found", vim.log.levels.INFO)
     end
 
     -- Check if buffer with same name exists and delete it
