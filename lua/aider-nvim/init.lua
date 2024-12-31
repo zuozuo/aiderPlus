@@ -164,7 +164,7 @@ function M.create_chat_window()
 
     -- Create scrollable chat window
     local width = math.floor(vim.o.columns * 0.6)
-    local height = 10  -- Show 10 lines
+    local height = 3  -- Show 3 lines
     -- Get cursor position
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     local win_height = vim.api.nvim_win_get_height(0)
