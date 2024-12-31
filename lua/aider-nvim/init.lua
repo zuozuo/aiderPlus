@@ -20,9 +20,6 @@ function M.setup(user_config)
   end
 end
 
--- Ensure commands are available when plugin is loaded
-M.setup()
-
 function M.setup_commands()
   vim.api.nvim_create_user_command("AiderPlus", function(opts)
     local action = opts.fargs[1]
@@ -97,5 +94,8 @@ function M.call_aider_plus()
   vim.notify("Aider Plus called", vim.log.levels.INFO)
   -- TODO: Implement Aider Plus specific logic here
 end
+
+-- Ensure commands are available when plugin is loaded
+M.setup()
 
 return M
