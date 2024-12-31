@@ -60,7 +60,7 @@ end
 
 function M.start_aider()
     -- Start Aider process
-    vim.notify("Aider started", vim.log.levels.INFO)
+    -- vim.notify("Aider started", vim.log.levels.INFO)
 end
 
 function M.send_code()
