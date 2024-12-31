@@ -22,9 +22,35 @@ function M.start_aider()
 end
 
 function M.start()
-    -- Check if floaterm is available
-    if vim.fn.exists("*floaterm#terminal#get_bufnr") == 0 then
-        vim.notify("Floaterm plugin is not available", vim.log.levels.ERROR)
+    -- Check if floaterm is available using multiple methods
+    local floaterm_available = false
+    local floaterm_error = nil
+    
+    -- Try multiple ways to check for floaterm
+    local success, result = pcall(function()
+        if vim.fn.exists("*floaterm#terminal#get_bufnr") == 1 then
+            floaterm_available = true
+        elseif vim.fn.exists(":FloatermNew") == 2 then
+            floaterm_available = true
+        else
+            -- Try loading floaterm
+            vim.cmd("packadd floaterm")
+            if vim.fn.exists("*floaterm#terminal#get_bufnr") == 1 then
+                floaterm_available = true
+            end
+        end
+    end)
+    
+    if not success then
+        floaterm_error = result
+    end
+    
+    if not floaterm_available then
+        local msg = "Floaterm plugin is not available"
+        if floaterm_error then
+            msg = msg .. ": " .. tostring(floaterm_error)
+        end
+        vim.notify(msg, vim.log.levels.ERROR)
         return
     end
 
@@ -36,12 +62,12 @@ function M.start()
     end
 
     -- Create new floaterm window
-    local success, result = pcall(function()
+    local create_success, create_result = pcall(function()
         vim.cmd("FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 zsh")
     end)
 
-    if not success then
-        vim.notify("Failed to create AiderPlus-Chat terminal: " .. tostring(result), vim.log.levels.ERROR)
+    if not create_success then
+        vim.notify("Failed to create AiderPlus-Chat terminal: " .. tostring(create_result), vim.log.levels.ERROR)
         return
     end
 
