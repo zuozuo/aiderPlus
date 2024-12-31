@@ -133,7 +133,7 @@ function M.send_selection()
         if start_pos and end_pos then
             local lines = vim.api.nvim_buf_get_lines(buf, start_pos[1] - 1, end_pos[1], false)
             content = table.concat(lines, "\n")
-            vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
+            vim.notify("Selected code:\n" .. content, vim.log.levels.DEBUG)
             send_to_aider(content)
             return
         end
