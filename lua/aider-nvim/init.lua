@@ -68,6 +68,7 @@ function M.send_code()
 end
 
 function M.send_selection()
+  vim.notify("==============111=======================", vim.log.levels.INFO)
   local buf = vim.api.nvim_get_current_buf()
   if not vim.api.nvim_buf_is_valid(buf) then
     vim.notify("Invalid buffer", vim.log.levels.ERROR)
@@ -81,6 +82,7 @@ function M.send_selection()
   local line1 = vim.v.lnum1 or 0
   local line2 = vim.v.lnum2 or 0
   
+  vim.notify("Line1: " .. line1 .. ", Line2: " .. line2, vim.log.levels.INFO)
   -- If we have a range (from command mode) and it's valid
   if line1 > 0 and line2 > 0 and line1 ~= line2 then
     local lines = vim.api.nvim_buf_get_lines(buf, line1 - 1, line2, false)
