@@ -135,13 +135,6 @@ function M.create()
     vim.cmd("startinsert")
     vim.api.nvim_win_set_cursor(chat_win, {1, #config.prompt})
     
-    -- Add ghost text hint
-    vim.api.nvim_buf_set_extmark(chat_buf, ghost_text_ns, 0, #config.prompt, {
-        virt_text = {{"use / to send quick `commands`, Enter to submit", "AiderGhostText"}},
-        virt_text_pos = "eol",
-        hl_mode = "combine",
-        priority = 10
-    })
 
     -- 设置自动补全
     vim.api.nvim_buf_set_option(chat_buf, "completefunc", "v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands")
