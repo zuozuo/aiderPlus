@@ -8,6 +8,14 @@ local original_cursor_pos = nil
 local original_visual_selection = nil
 local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
+-- Define highlight group for smaller ghost text
+vim.api.nvim_set_hl(0, "AiderGhostText", {
+    ctermfg = "Gray",
+    fg = "#808080",
+    italic = true,
+    default = true
+})
+
 -- 定义快捷命令列表
 local quick_commands = {
     "/explain this",
@@ -107,7 +115,7 @@ function M.create()
             elseif #content == 1 and #content[1] == #config.prompt then
                 -- Re-add ghost text when input is cleared
                 vim.api.nvim_buf_set_extmark(chat_buf, ghost_text_ns, 0, #config.prompt, {
-                    virt_text = {{"use / to send quick `commands`, Enter to submit", "Comment"}},
+                    virt_text = {{"use / to send quick `commands`, Enter to submit", "AiderGhostText"}},
                     virt_text_pos = "eol",
                     hl_mode = "combine",
                     priority = 10
@@ -129,7 +137,7 @@ function M.create()
     
     -- Add ghost text hint
     vim.api.nvim_buf_set_extmark(chat_buf, ghost_text_ns, 0, #config.prompt, {
-        virt_text = {{"use / to send quick `commands`, Enter to submit", "Comment"}},
+        virt_text = {{"use / to send quick `commands`, Enter to submit", "AiderGhostText"}},
         virt_text_pos = "eol",
         hl_mode = "combine",
         priority = 10
