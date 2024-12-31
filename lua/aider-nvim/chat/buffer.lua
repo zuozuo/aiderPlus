@@ -27,13 +27,10 @@ function M.create()
             end_line = end_line,
             content = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
         }
-        vim.notify(string.format("Saved visual selection: %d - %d", start_line, end_line), vim.log.levels.INFO)
     else
         original_visual_selection = nil
         vim.notify("No visual selection found", vim.log.levels.INFO)
     end
-
-    vim.notify("original_visual_selection: " .. tostring(original_visual_selection), vim.log.levels.INFO)
 
     -- Check if buffer with same name exists and delete it
     local existing_buf = vim.fn.bufnr("AiderPlus Chat")
