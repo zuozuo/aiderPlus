@@ -48,7 +48,12 @@ require('aider-nvim').setup({
 The `call_aider_plus` function provides extended Aider capabilities. You can call it via:
 
 1. Default keybinding: `<leader>ap`
-2. Direct Lua call:
+2. Vim command with specific action:
+```vim
+:AiderPlus send_code
+:AiderPlus send_selection
+```
+3. Direct Lua call:
 ```lua
 require('aider-nvim').call_aider_plus()
 ```

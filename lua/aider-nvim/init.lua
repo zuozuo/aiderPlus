@@ -14,9 +14,29 @@ local config = {
 function M.setup(user_config)
   config = vim.tbl_deep_extend("force", config, user_config or {})
   M.setup_keybindings()
+  M.setup_commands()
   if config.auto_start then
     M.start_aider()
   end
+end
+
+function M.setup_commands()
+  vim.api.nvim_create_user_command("AiderPlus", function(opts)
+    local action = opts.fargs[1]
+    if action == "send_code" then
+      M.send_code()
+    elseif action == "send_selection" then
+      M.send_selection()
+    else
+      vim.notify("Invalid action for AiderPlus. Available actions: send_code, send_selection", vim.log.levels.ERROR)
+    end
+  end, {
+    nargs = 1,
+    complete = function()
+      return { "send_code", "send_selection" }
+    end,
+    desc = "Call Aider Plus functionality with specific action"
+  })
 end
 
 function M.setup_keybindings()
