@@ -158,7 +158,6 @@ end
 function M.create_chat_window()
     -- Create new buffer if not exists
     if not chat_buf or not vim.api.nvim_buf_is_valid(chat_buf) then
-    if not chat_buf or not vim.api.nvim_buf_is_valid(chat_buf) then
         chat_buf = vim.api.nvim_create_buf(false, true)
         vim.api.nvim_buf_set_name(chat_buf, "AiderPlus Chat")
         vim.api.nvim_buf_set_option(chat_buf, "filetype", "markdown")
@@ -177,9 +176,7 @@ function M.create_chat_window()
 
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     opts.col = vim.fn.indent(cursor_pos[1])  -- Align with buffer's text start
-    opts.row = cursor_pos[1]  -- Use cursor's current row
-    vim.notify("Cursor position: " .. vim.inspect(cursor_pos), vim.log.levels.INFO)
-    vim.notify("Chat window config: " .. vim.inspect(opts), vim.log.levels.INFO)
+    opts.row = cursor_pos[1] - vim.fn.line('w0') + 1  -- Calculate relative row position
 
     if not chat_win or not vim.api.nvim_win_is_valid(chat_win) then
         chat_win = vim.api.nvim_open_win(chat_buf, true, opts)
