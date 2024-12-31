@@ -16,15 +16,6 @@ function M.setup(user_config)
   M.setup_keybindings()
   M.setup_commands()
   
-  -- 设置 autocmd 在保存 Lua 文件时重新加载 AiderPlus
-  vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*.lua",
-    callback = function()
-      vim.cmd("Lazy reload AiderPlus")
-    end,
-    desc = "Reload AiderPlus after saving Lua files"
-  })
-
   if config.auto_start then
     M.start_aider()
   end
