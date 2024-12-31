@@ -33,36 +33,37 @@ function M.submit(context)
     
     if input and #input > 0 then
         -- 检查是否存在名为 AiderPlus-Chat 的 floaterm 窗口
-        local term_exists = false
-        for _, term in ipairs(vim.fn["floaterm#list"]()) do
-            if vim.fn["floaterm#gettitle"](term) == "AiderPlus-Chat" then
-                term_exists = true
-                vim.fn["floaterm#show"](term)
-                break
-            end
-        end
+        local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
 
-        -- 如果不存在则创建新的 floaterm 窗口
-        if not term_exists then
-            vim.fn["floaterm#new"]({
+        if term_bufnr ~= -1 then
+            -- 如果存在则显示窗口
+            vim.fn["floaterm#terminal#open_existing"](term_bufnr)
+        else
+            -- 如果不存在则创建新的 floaterm 窗口
+            term_bufnr = vim.fn["floaterm#terminal#open"](-1, "zsh", {}, {
                 name = "AiderPlus-Chat",
                 wintype = "split",
                 width = 0.5,
                 height = 0.5,
                 position = "bottom",
                 autoclose = 0,
-                title = "AiderPlus-Chat",
-                shell = "zsh"
+                title = "AiderPlus-Chat"
             })
+            
+            if term_bufnr == -1 then
+                vim.notify("Failed to create AiderPlus-Chat terminal", vim.log.levels.ERROR)
+                return
+            end
         end
 
         -- 将输入发送到 floaterm
-        vim.fn["floaterm#send"](input)
-        vim.notify("Input submitted: " .. input, vim.log.levels.INFO)
-    else
-        vim.notify("No input provided", vim.log.levels.WARN)
+        if input and #input > 0 then
+            vim.fn["floaterm#terminal#send"](term_bufnr, {input})
+            vim.notify("Input submitted: " .. input, vim.log.levels.INFO)
+        else
+            vim.notify("Empty input, nothing to send", vim.log.levels.WARN)
+        end
     end
-    
     M.toggle()
 end
 
