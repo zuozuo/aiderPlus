@@ -53,6 +53,29 @@ function M.toggle_chat()
     chat.toggle()
 end
 
+function M.get_visual_selection()
+    local mode = vim.fn.mode()
+    if mode ~= "v" and mode ~= "V" then
+        return ""
+    end
+    
+    local start_pos = vim.fn.getpos("'<")
+    local end_pos = vim.fn.getpos("'>")
+    
+    local start_line = start_pos[2]
+    local end_line = end_pos[2]
+    
+    local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+    
+    -- Add line numbers to each line
+    local numbered_lines = {}
+    for i, line in ipairs(lines) do
+        table.insert(numbered_lines, string.format("%d: %s", start_line + i - 1, line))
+    end
+    
+    return table.concat(numbered_lines, "\n")
+end
+
 function M.get_current_line()
     local buffer = require("aider-nvim.chat.buffer")
     local original_buf = buffer.get_original_buf()
@@ -98,10 +121,14 @@ end
 function M.submit_and_close()
     local line, line_num = M.get_current_line()
     local context = M.get_code_context()
+    local selection = M.get_visual_selection()
     
     local combined = ""
     if line and #line > 0 then
         combined = string.format("Current line (%d): %s\n", line_num, line)
+    end
+    if selection and #selection > 0 then
+        combined = combined .. "Selected code:\n" .. selection .. "\n"
     end
     if context and #context > 0 then
         combined = combined .. "Code context:\n" .. context
