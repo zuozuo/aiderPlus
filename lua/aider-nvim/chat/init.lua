@@ -42,10 +42,13 @@ function M.submit(context)
         -- Get original buffer's file path and send it first
         local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
         if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
-            local file_path = vim.api.nvim_buf_get_name(original_buf)
-            if file_path and #file_path > 0 and not file_path:match("^term://") then
-                vim.notify("Sending file path to AiderPlus-Chat: " .. file_path, vim.log.levels.INFO)
-                vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. file_path})
+            local full_path = vim.api.nvim_buf_get_name(original_buf)
+            if full_path and #full_path > 0 and not full_path:match("^term://") then
+                -- Get relative path from current working directory
+                local cwd = vim.fn.getcwd()
+                local rel_path = full_path:gsub("^" .. cwd .. "/", "")
+                vim.notify("Sending file path to AiderPlus-Chat: " .. rel_path, vim.log.levels.INFO)
+                vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. rel_path})
             end
         end
 
