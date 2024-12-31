@@ -4,6 +4,12 @@ M.default_config = {
     auto_start = true,
     prompt = "Send text to Aider:  ",
     code_context_window = 2,  -- 获取光标上下20行代码作为上下文
+    quick_commands = {
+        "/explain this",
+        "/fix that", 
+        "/refactor this",
+        "/add comments"
+    },
     keybindings = {
         send_code = "<leader>ac",
         send_selection = "<leader>as",

@@ -15,13 +15,6 @@ vim.api.nvim_set_hl(0, "AiderGhostText", {
     default = true
 })
 
--- 定义快捷命令列表
-local quick_commands = {
-    "/explain this",
-    "/fix that", 
-    "/refactor this",
-    "/add comments"
-}
 
 function M.create()
     local config = require("aider-nvim.config").get()
@@ -197,8 +190,9 @@ function M.complete_quick_commands()
     local line = vim.api.nvim_get_current_line()
     local prefix = line:match(".*/(.*)") or ""
     
+    local config = require("aider-nvim.config").get()
     local matches = {}
-    for _, cmd in ipairs(quick_commands) do
+    for _, cmd in ipairs(config.quick_commands) do
         if cmd:lower():find(prefix:lower(), 1, true) then
             table.insert(matches, {word = cmd, kind = "Quick Command"})
         end
