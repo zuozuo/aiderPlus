@@ -95,7 +95,4 @@ function M.call_aider_plus()
   -- TODO: Implement Aider Plus specific logic here
 end
 
--- Ensure commands are available when plugin is loaded
-M.setup()
-
 return M

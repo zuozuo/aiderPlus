@@ -23,7 +23,9 @@ use {
   -- Ensure the plugin is loaded
   after = "nvim-lspconfig"
 }
-```
+
+-- Note: Do not call setup() directly in the plugin code
+-- The setup() function should only be called once in your configuration
 
 Using lazy.nvim:
 
@@ -39,7 +41,9 @@ Using lazy.nvim:
     })
   end,
 }
-```
+
+-- Note: Do not call setup() directly in the plugin code
+-- The setup() function should only be called once in your configuration
 
 ## Configuration
 
