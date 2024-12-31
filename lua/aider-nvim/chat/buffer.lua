@@ -10,10 +10,14 @@ local ghost_text_ns = vim.api.nvim_create_namespace("aider_ghost_text")
 
 -- Define highlight group for smaller ghost text that inherits from Comment
 vim.api.nvim_set_hl(0, "AiderGhostText", {
-    link = "Comment",
-    italic = true,
-    default = true
+    link = "Comment",  -- Inherit from Comment highlight group
+    italic = true,     -- Make text italic
+    default = true     -- Make this the default style
 })
+
+-- This highlight group is used for the ghost text that appears after the prompt
+-- to guide users about available commands. It uses a subtle, italic style that
+-- matches the editor's comment style to be non-intrusive yet visible.
 
 
 
