@@ -121,7 +121,6 @@ function M.send_selection()
         -- vim.notify("Selected code:\n" .. content, vim.log.levels.INFO)
         vim.notify("=========================================")
         local cmd = line1 .. "," .. line2 .. "FloatermSend"
-        vim.notify(cmd, vim.log.levels.INFO)
         vim.cmd(cmd)
         -- send_to_aider(content)
         return
