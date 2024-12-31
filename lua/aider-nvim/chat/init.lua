@@ -11,12 +11,17 @@ function M.toggle()
     end
 end
 
-function M.submit()
+function M.submit(context)
     if not buffer.is_open() then return end
 
     local config = require("aider-nvim.config").get()
     local win = buffer.get_win()
     local buf = buffer.get_buf()
+
+    -- 如果有上下文，先显示它
+    if context and #context > 0 then
+        vim.notify("Code context:\n" .. context, vim.log.levels.INFO)
+    end
     
     if not win or not vim.api.nvim_win_is_valid(win) or not buf or not vim.api.nvim_buf_is_valid(buf) then
         vim.notify("Chat window is not valid", vim.log.levels.ERROR)

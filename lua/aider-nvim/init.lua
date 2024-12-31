@@ -70,9 +70,12 @@ end
 
 function M.submit_and_close()
     local context = M.get_code_context()
-    -- 这里可以添加对上下文的处理逻辑
-    vim.notify("Code context:\n" .. context, vim.log.levels.INFO)
-    chat.submit()
+    if context and #context > 0 then
+        -- 将上下文传递给 chat.submit()
+        chat.submit(context)
+    else
+        vim.notify("No code context found", vim.log.levels.WARN)
+    end
 end
 
 function M.call_aider_plus()
