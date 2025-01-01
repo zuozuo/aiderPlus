@@ -89,6 +89,9 @@ function M.create()
         end
     end
 
+    -- Use the saved original cursor position for window placement
+    local cursor_row, cursor_col = unpack(original_cursor_pos)
+    
     input_win = require("snacks.input").input({
         prompt = config.prompt,
         win = {
@@ -104,6 +107,10 @@ function M.create()
             b = {
                 completion = false, -- disable blink completions in input
             },
+            -- Use the saved cursor position
+            anchor = "NW",
+            row = cursor_row - 1,  -- Convert to 0-based row
+            col = cursor_col       -- Already 0-based
         }
     }, on_confirm)
 end
