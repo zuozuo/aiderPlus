@@ -30,11 +30,20 @@ function M.create()
         }
     end
 
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local row = cursor_pos[1] - 1  -- Lua is 0-based
+    local col = cursor_pos[2]
+    
     vim.ui.input({
         prompt = config.prompt,
         default = "",
+        relative = "cursor",
+        position = {
+            row = row,
+            col = col
+        }
     }, function(input)
-        if #input > 0 then
+        if input and #input > 0 then
             require("aider-nvim.chat").submit(input)
         end
     end)
