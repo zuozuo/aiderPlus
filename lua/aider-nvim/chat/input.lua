@@ -4,6 +4,10 @@ local M = {}
 local current_window = nil
 local current_buffer = nil
 
+function M.is_open()
+    return current_window ~= nil and vim.api.nvim_win_is_valid(current_window)
+end
+
 function M.close()
     if current_window and vim.api.nvim_win_is_valid(current_window) then
         vim.api.nvim_win_close(current_window, true)

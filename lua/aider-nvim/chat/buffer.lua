@@ -7,6 +7,13 @@ local original_visual_selection = nil
 
 function M.create()
     local config = require("aider-nvim.config").get()
+    local input = require("aider-nvim.chat.input")
+    
+    -- If input window is already open, close it first
+    if input.is_open() then
+        input.close()
+        return
+    end
     
     -- Save original buffer and cursor position
     original_buf = vim.api.nvim_get_current_buf()
