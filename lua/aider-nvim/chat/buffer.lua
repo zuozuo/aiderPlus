@@ -93,12 +93,11 @@ function M.create()
     local current_cursor = vim.api.nvim_win_get_cursor(0)
     local cursor_row, cursor_col = unpack(current_cursor)
     
+    dd(cursor_row, cursor_col)
     input_win = require("snacks.input").input({
         prompt = config.prompt,
         win = {
-            relative = "cursor",
-            row = 0,
-            col = 0,
+            relative = "editor",
             height = 1,
             width = 100,
             wo = {
