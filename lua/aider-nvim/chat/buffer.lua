@@ -33,6 +33,8 @@ function M.create()
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     local row = cursor_pos[1] - 1  -- Lua is 0-based
     local col = cursor_pos[2]
+
+    vim.notify("row: " .. row .. ", col: " .. col, vim.log.levels.INFO, { title = "Chat" })
     
     vim.ui.input({
         prompt = config.prompt,
