@@ -6,6 +6,9 @@ function M.toggle()
 end
 
 function M.submit(full_message)
+    -- Print the full message for debugging
+    print("Submitting full message:\n" .. full_message)
+    
     if not full_message or #full_message == 0 then return end
 
     local config = require("aider-nvim.config").get()
