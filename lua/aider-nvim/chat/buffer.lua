@@ -28,10 +28,11 @@ end
 function M.create()
     local config = require("aider-nvim.config").get()
     
-    -- If input window is already open, close it first
+    -- If input window is already open, close it and return
     if M.is_open() then
         input_win:close()
         input_win = nil
+        return
     end
     
     -- Save original buffer and cursor position
