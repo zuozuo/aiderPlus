@@ -43,11 +43,22 @@ function M.create()
         end
     end
 
-    require("aider-nvim.chat.input").input({
+    local input_win = require("snacks.input").input({
         prompt = config.prompt,
-        default = "",
-        win_position = "cursor",
-        input_width = 50
+        win = {
+            relative = "cursor",
+            row = 0,
+            col = 0,
+            height = 1,
+            width = 100,
+            wo = {
+                winhighlight = "NormalFloat:SnacksInputNormal,FloatBorder:SnacksInputBorder,FloatTitle:SnacksInputTitle",
+                cursorline = false,
+            },
+            b = {
+                completion = false, -- disable blink completions in input
+            },
+        }
     }, on_confirm)
 end
 
