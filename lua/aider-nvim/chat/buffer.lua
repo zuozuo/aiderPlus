@@ -9,8 +9,8 @@ function M.create()
     local config = require("aider-nvim.config").get()
     
     -- If input window is already open, close it first
-    if input.is_open() then
-        input.close()
+    if M.is_open() then
+        require("snacks.input").close()
         return
     end
     
