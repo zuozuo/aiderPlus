@@ -36,30 +36,12 @@ function M.create()
     local row = cursor_pos[1] == 1 and 1 or 0
     local col = cursor_pos[2] + 1  
 
-    local on_confirm = function(value)
-        if value and #value > 0 then
-            vim.notify("=============================got value")
-            vim.notify("value: " .. value)
-            require("aider-nvim.chat").submit(value)
-        end
-    end
-
-ds
-
-    -- vim.ui.input({
-    --     prompt = config.prompt,
-    --     default = "",
-    --     relative = "cursor",
-    --     position = {
-    --         row = row,
-    --         col = col
-    --     },
-    --     border = "single"  -- 添加边框让输入框更明显
-    -- }, function(input)
-    --     if input and #input > 0 then
-    --         require("aider-nvim.chat").submit(input)
-    --     end
-    -- end)
+    require("aider-nvim.chat.input").input({
+        prompt = config.prompt,
+        default = "",
+        win_position = "cursor",
+        input_width = 50
+    }, on_confirm)
 end
 
 function M.is_open()
