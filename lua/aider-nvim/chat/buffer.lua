@@ -59,7 +59,27 @@ function M.create()
 
     local on_confirm = function(value)
         if value and #value > 0 then
-            require("aider-nvim.chat").submit(value)
+            -- Get all context information
+            local cursor_context = M.get_cursor_context()
+            local code_context = M.get_code_context(5)  -- Use window_size of 5
+            local visual_selection = M.get_original_visual_selection()
+            
+            -- Build the context message
+            local context_message = "Cursor Context:\n"
+            context_message = context_message .. string.format("Line %d, Col %d: %s\n\n", 
+                cursor_context.line, cursor_context.col, cursor_context.content)
+            
+            context_message = context_message .. "Code Context:\n" .. code_context .. "\n\n"
+            
+            if visual_selection then
+                context_message = context_message .. "Visual Selection:\n"
+                context_message = context_message .. table.concat(visual_selection.content, "\n") .. "\n\n"
+            end
+            
+            -- Combine context with user input
+            local full_message = context_message .. "User Input:\n" .. value
+            
+            require("aider-nvim.chat").submit(full_message)
         end
     end
 
