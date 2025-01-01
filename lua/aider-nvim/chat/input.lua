@@ -1,5 +1,20 @@
 local M = {}
 
+-- 用于存储当前打开的窗口和缓冲区
+local current_window = nil
+local current_buffer = nil
+
+function M.close()
+    if current_window and vim.api.nvim_win_is_valid(current_window) then
+        vim.api.nvim_win_close(current_window, true)
+    end
+    if current_buffer and vim.api.nvim_buf_is_valid(current_buffer) then
+        vim.api.nvim_buf_delete(current_buffer, { force = true })
+    end
+    current_window = nil
+    current_buffer = nil
+end
+
 function M.window_center(input_width)
 	return {
 		relative = "win",
@@ -47,9 +62,12 @@ function M.input(opts, on_confirm, win_config)
 		win_config = vim.tbl_deep_extend("force", win_config, M.window_center(win_config.width))
 	end
 
+	-- 如果已经有打开的窗口，先关闭它
+	M.close()
+
 	-- Create floating window.
-	local buffer = vim.api.nvim_create_buf(false, true)
-	local window = vim.api.nvim_open_win(buffer, true, win_config)
+	current_buffer = vim.api.nvim_create_buf(false, true)
+	current_window = vim.api.nvim_open_win(current_buffer, true, win_config)
 	vim.api.nvim_buf_set_text(buffer, 0, 0, 0, 0, { default })
 
 	-- Put cursor at the end of the default value
@@ -61,19 +79,19 @@ function M.input(opts, on_confirm, win_config)
 		local lines = vim.api.nvim_buf_get_lines(buffer, 0, 1, false)
 		vim.cmd("stopinsert")
 		on_confirm(lines[1])
-		vim.api.nvim_win_close(window, true)
+		M.close()
 	end, { buffer = buffer })
 
 	-- Esc or q to close
 	vim.keymap.set("n", "<esc>", function()
 		on_confirm(nil)
 		vim.cmd("stopinsert")
-		vim.api.nvim_win_close(window, true)
+		M.close()
 	end, { buffer = buffer })
 	vim.keymap.set("n", "q", function()
 		on_confirm(nil)
 		vim.cmd("stopinsert")
-		vim.api.nvim_win_close(window, true)
+		M.close()
 	end, { buffer = buffer })
 end
 
