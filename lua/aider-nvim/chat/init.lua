@@ -5,6 +5,9 @@ function M.toggle()
     buffer.create()
 end
 
+-- Cache for last sent file path
+local last_sent_file = nil
+
 function M.submit(full_message)
     -- Print the full message for debugging
     vim.notify("Submitting full message:\n" .. full_message)
@@ -34,7 +37,12 @@ function M.submit(full_message)
             -- Get relative path from current working directory
             local cwd = vim.fn.getcwd()
             local rel_path = full_path:gsub("^" .. cwd .. "/", "")
-            vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. rel_path})
+            
+            -- Only send if it's a different file than last time
+            if rel_path ~= last_sent_file then
+                vim.fn["floaterm#terminal#send"](term_bufnr, {"/add " .. rel_path})
+                last_sent_file = rel_path  -- Update cache
+            end
         end
     end
 
