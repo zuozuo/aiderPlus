@@ -30,6 +30,7 @@ function M.create()
         }
     end
 
+    vim.notify("==========================================")
     -- Use vim.ui.input for user input
     vim.ui.input({
         prompt = config.prompt,
@@ -44,6 +45,7 @@ function M.create()
             return matches
         end
     }, function(input)
+        vim.notify("info", "You typed: " .. input)
         if input and #input > 0 then
             require("aider-nvim.chat").submit(input)
         end
