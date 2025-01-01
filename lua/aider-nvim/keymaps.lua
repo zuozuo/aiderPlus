@@ -12,7 +12,7 @@ function M.setup()
         require("aider-nvim").send_selection()
     end, { desc = "Send selection to Aider" })
 
-    vim.keymap.set("n", keybindings.toggle_chat, function()
+    vim.keymap.set({"n", "v"}, keybindings.toggle_chat, function()
         require("aider-nvim.chat").toggle()
     end, { desc = "Open Aider chat input" })
 
