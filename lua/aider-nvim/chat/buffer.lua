@@ -67,5 +67,3 @@ function M.get_original_visual_selection()
 end
 
 return M
-
-return M
