@@ -15,7 +15,14 @@ function M.get_code_context(window_size)
     local end_line = current_line + window_size
     
     local lines = vim.api.nvim_buf_get_lines(buf, start_line - 1, end_line, false)
-    return table.concat(lines, "\n")
+    
+    -- Add line numbers to each line
+    local numbered_lines = {}
+    for i, line in ipairs(lines) do
+        table.insert(numbered_lines, string.format("%d: %s", start_line + i - 1, line))
+    end
+    
+    return table.concat(numbered_lines, "\n")
 end
 
 function M.create()
