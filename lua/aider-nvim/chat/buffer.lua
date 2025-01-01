@@ -31,7 +31,7 @@ function M.create()
     end
 
     -- Use vim.ui.input for user input
-    vim.ui.input({
+    local ok, input = pcall(vim.ui.input, {
         prompt = config.prompt,
         default = "",
         completion = function(prefix)
@@ -43,11 +43,11 @@ function M.create()
             end
             return matches
         end
-    }, function(input)
-        if input and #input > 0 then
-            require("aider-nvim").submit(input)
-        end
-    end)
+    })
+
+    if ok and input and #input > 0 then
+        require("aider-nvim.chat").submit(input)
+    end
 end
 
 function M.is_open()
