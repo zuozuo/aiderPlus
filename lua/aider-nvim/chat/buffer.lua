@@ -104,8 +104,8 @@ function M.create()
     -- Calculate absolute position considering window position
     local abs_row = win_info.winrow + win_row + 1 -- 0-based screen position
     
-    -- Ensure minimum column position of 2 for left padding
-    local min_col = 8 
+    -- Ensure minimum column position from config
+    local min_col = config.min_col or 8
     cursor_col = math.max(cursor_col, min_col)
     
     input_win = require("snacks.input").input({
