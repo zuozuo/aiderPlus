@@ -45,8 +45,11 @@ function M.create()
             return matches
         end
     }, function(input)
-        vim.notify("info", "You typed: " .. input)
-        if input and #input > 0 then
+        if not input then
+            vim.notify("No input provided", vim.log.levels.INFO)
+            return
+        end
+        if #input > 0 then
             require("aider-nvim.chat").submit(input)
         end
     end)
