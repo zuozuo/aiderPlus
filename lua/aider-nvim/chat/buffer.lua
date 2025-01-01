@@ -44,6 +44,8 @@ function M.create()
             return matches
         end
     })
+    vim.notify("[Aider] Input: " .. tostring(input))
+    vim.notify("[Aider] Input ok: " .. tostring(ok))
 
     if ok and input and #input > 0 then
         require("aider-nvim.chat").submit(input)
