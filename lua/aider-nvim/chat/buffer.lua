@@ -33,8 +33,8 @@ function M.create()
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
     -- 将 row 设置为 0 让输入框出现在光标所在行
     -- col 保持原样，但增加 1 让输入框与光标对齐
-    local row = 0
-    local col = cursor_pos[2] + 1
+    local row = cursor_pos[1] == 1 and 1 or 0
+    local col = cursor_pos[2] + 1  
 
     vim.ui.input({
         prompt = config.prompt,
