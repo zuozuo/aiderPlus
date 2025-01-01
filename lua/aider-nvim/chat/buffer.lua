@@ -30,25 +30,10 @@ function M.create()
         }
     end
 
-    vim.notify("==========================================")
-    -- Use vim.ui.input for user input
     vim.ui.input({
         prompt = config.prompt,
         default = "",
-        completion = function(prefix)
-            local matches = {}
-            for _, cmd in ipairs(config.quick_commands) do
-                if cmd:lower():find(prefix:lower(), 1, true) then
-                    table.insert(matches, cmd)
-                end
-            end
-            return matches
-        end
     }, function(input)
-        if not input then
-            vim.notify("No input provided", vim.log.levels.INFO)
-            return
-        end
         if #input > 0 then
             require("aider-nvim.chat").submit(input)
         end
