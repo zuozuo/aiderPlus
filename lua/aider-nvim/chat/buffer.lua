@@ -32,7 +32,6 @@ function M.create()
     if M.is_open() then
         input_win:close()
         input_win = nil
-        return
     end
     
     -- Save original buffer and cursor position
