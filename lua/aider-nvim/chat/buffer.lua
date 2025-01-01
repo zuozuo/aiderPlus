@@ -89,11 +89,19 @@ function M.create()
         end
     end
 
-    -- Get current cursor position for window placement
+    -- Get current cursor position and window information
     local current_cursor = vim.api.nvim_win_get_cursor(0)
     local cursor_row, cursor_col = unpack(current_cursor)
+    local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
     
-    dd(cursor_row, cursor_col)
+    -- Calculate absolute row position relative to editor
+    local win_topline = win_info.topline - 1  -- 0-based
+    local win_height = win_info.height
+    local win_row = cursor_row - 1 - win_topline  -- 0-based relative to window
+    
+    -- Calculate absolute position considering window position
+    local abs_row = win_info.winrow + win_row - 1  -- 0-based screen position
+    
     input_win = require("snacks.input").input({
         prompt = config.prompt,
         win = {
@@ -108,8 +116,8 @@ function M.create()
                 completion = false, -- disable blink completions in input
             },
             anchor = "NW",
-            row = cursor_row - 1,  -- Convert to 0-based row
-            col = cursor_col       -- Already 0-based
+            row = abs_row,  -- Use absolute screen position
+            col = cursor_col
         }
     }, on_confirm)
 end
