@@ -105,8 +105,8 @@ function M.create()
     local abs_row = win_info.winrow + win_row + 1 -- 0-based screen position
     
     -- Ensure minimum column position from config
-    local min_col = config.min_col or 8
-    cursor_col = math.max(cursor_col, min_col)
+    local input_min_col = config.input_min_col or 8
+    cursor_col = math.max(cursor_col, input_min_col)
     
     input_win = require("snacks.input").input({
         prompt = config.prompt,
