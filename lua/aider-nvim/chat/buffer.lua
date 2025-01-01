@@ -52,10 +52,16 @@ function M.create()
     -- Check if there's an actual selection (start and end positions differ)
     if start_line ~= end_line or start_pos[3] ~= end_pos[3] then
         vim.notify("Visual selection detected", vim.log.levels.INFO)
+        local lines = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
+        local numbered_lines = {}
+        for i, line in ipairs(lines) do
+            table.insert(numbered_lines, string.format("%d: %s", start_line + i - 1, line))
+        end
+        
         original_visual_selection = {
             start_line = start_line,
             end_line = end_line,
-            content = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
+            content = numbered_lines
         }
     end
 
