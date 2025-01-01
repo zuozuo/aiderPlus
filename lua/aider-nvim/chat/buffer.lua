@@ -6,6 +6,18 @@ local original_buf = nil
 local original_cursor_pos = nil
 local original_visual_selection = nil
 
+function M.get_code_context(window_size)
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local current_line = cursor_pos[1]
+    local buf = vim.api.nvim_get_current_buf()
+    
+    local start_line = math.max(1, current_line - window_size)
+    local end_line = current_line + window_size
+    
+    local lines = vim.api.nvim_buf_get_lines(buf, start_line - 1, end_line, false)
+    return table.concat(lines, "\n")
+end
+
 function M.create()
     local config = require("aider-nvim.config").get()
     
