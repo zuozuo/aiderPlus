@@ -5,8 +5,8 @@ function M.toggle()
     buffer.create()
 end
 
-function M.submit(input)
-    if not input or #input == 0 then return end
+function M.submit(full_message)
+    if not full_message or #full_message == 0 then return end
 
     local config = require("aider-nvim.config").get()
     
@@ -34,8 +34,8 @@ function M.submit(input)
         end
     end
 
-    -- Send the user input
-    vim.fn["floaterm#terminal#send"](term_bufnr, {input})
+    -- Send the user input with context info
+    vim.fn["floaterm#terminal#send"](term_bufnr, {full_message})
 end
 
 return M
