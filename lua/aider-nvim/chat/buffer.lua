@@ -119,12 +119,11 @@ function M.create()
                 cursorline = false,
             },
             b = {
-                completion = false, -- disable blink completions in input
-            },
-            completion = {
-                enabled = true,
-                items = config.quick_commands,
-                trigger = "/",
+                completion = {
+                    enabled = true,
+                    items = config.quick_commands,
+                    trigger = "/",
+                },
             },
             anchor = "NW",
             row = abs_row,  -- Use absolute screen position
