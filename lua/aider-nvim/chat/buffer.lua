@@ -28,6 +28,15 @@ end
 function M.create()
     local config = require("aider-nvim.config").get()
     
+    -- Set up completion for the input buffer
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "aider_input",
+        callback = function()
+            vim.bo.completefunc = "v:lua.require'aider-nvim.chat.buffer'.complete"
+            vim.bo.completeopt = "menuone,noselect"
+        end
+    })
+    
     -- If input window is already open, close it and return to normal mode
     if M.is_open() then
         input_win:close()
@@ -119,11 +128,7 @@ function M.create()
                 cursorline = false,
             },
             b = {
-                completion = {
-                    enabled = true,
-                    items = config.quick_commands,
-                    trigger = "/",
-                },
+                filetype = "aider_input",
             },
             anchor = "NW",
             row = abs_row,  -- Use absolute screen position
@@ -160,6 +165,29 @@ function M.get_cursor_context()
         col = current_col + 1,  -- 转换为1-based列号
         content = line_content
     }
+end
+
+function M.complete(findstart, base)
+    local config = require("aider-nvim.config").get()
+    
+    if findstart == 1 then
+        -- Find start position
+        local line = vim.fn.getline(".")
+        local col = vim.fn.col(".") - 1
+        while col > 0 and line:sub(col, col):match("%S") do
+            col = col - 1
+        end
+        return col
+    else
+        -- Return completion items
+        local completions = {}
+        for _, cmd in ipairs(config.quick_commands) do
+            if cmd:lower():find(base:lower(), 1, true) == 1 then
+                table.insert(completions, cmd)
+            end
+        end
+        return completions
+    end
 end
 
 return M
