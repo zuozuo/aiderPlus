@@ -44,10 +44,7 @@ function M.create()
         end
     end
 
-    require("aider-nvim.chat.input").input({
-        prompt = config.prompt,
-        default = "",
-    }, on_confirm, { border = 'double' })
+ds
 
     -- vim.ui.input({
     --     prompt = config.prompt,
