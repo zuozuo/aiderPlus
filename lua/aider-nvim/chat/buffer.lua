@@ -48,8 +48,10 @@ function M.create()
     local start_line = start_pos[2]
     local end_line = end_pos[2]
     
+    vim.notify("start_line: " .. start_line .. " end_line: " .. end_line, vim.log.levels.INFO)
     -- Check if there's an actual selection (start and end positions differ)
     if start_line ~= end_line or start_pos[3] ~= end_pos[3] then
+        vim.notify("Visual selection detected", vim.log.levels.INFO)
         original_visual_selection = {
             start_line = start_line,
             end_line = end_line,
@@ -63,26 +65,29 @@ function M.create()
             local cursor_context = M.get_cursor_context()
             local code_context = M.get_code_context(5)  -- Use window_size of 5
             local visual_selection = M.get_original_visual_selection()
+            vim.notify("visual selection: " .. vim.inspect(visual_selection), vim.log.levels.INFO)
             
             -- Build the context message
-            local context_message = "Cursor Context:\n"
+            local context_message = "Current Line:\n"
             context_message = context_message .. string.format("Line %d, Col %d: %s\n\n", 
                 cursor_context.line, cursor_context.col, cursor_context.content)
-            
+
             context_message = context_message .. "Code Context:\n" .. code_context .. "\n\n"
             
             if visual_selection then
                 context_message = context_message .. "Visual Selection:\n"
                 context_message = context_message .. table.concat(visual_selection.content, "\n") .. "\n\n"
             end
-            
+
             -- Combine context with user input
             local full_message = context_message .. "User Requirement:\n" .. value
             
+            -- vim.notify("context message: 4" .. full_message, vim.log.levels.INFO)
+
             -- Print the full message for debugging
             print("Full message to be submitted:\n" .. full_message)
             
-            require("aider-nvim.chat").submit(full_message)
+            -- require("aider-nvim.chat").submit(full_message)
         end
     end
 
