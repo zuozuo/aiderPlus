@@ -31,11 +31,11 @@ function M.create()
     end
 
     local cursor_pos = vim.api.nvim_win_get_cursor(0)
-    local row = cursor_pos[1] - 1  -- Lua is 0-based
-    local col = cursor_pos[2]
+    -- 将 row 设置为 1 让输入框出现在光标下方
+    -- col 保持原样，但增加 1 让输入框与光标对齐
+    local row = 1
+    local col = cursor_pos[2] + 1
 
-    vim.notify("row: " .. row .. ", col: " .. col, vim.log.levels.INFO, { title = "Chat" })
-    
     vim.ui.input({
         prompt = config.prompt,
         default = "",
@@ -43,7 +43,8 @@ function M.create()
         position = {
             row = row,
             col = col
-        }
+        },
+        border = "single"  -- 添加边框让输入框更明显
     }, function(input)
         if input and #input > 0 then
             require("aider-nvim.chat").submit(input)
