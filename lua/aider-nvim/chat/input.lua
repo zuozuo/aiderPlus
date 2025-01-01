@@ -69,31 +69,31 @@ function M.input(opts, on_confirm, win_config)
 	-- Create floating window.
 	current_buffer = vim.api.nvim_create_buf(false, true)
 	current_window = vim.api.nvim_open_win(current_buffer, true, win_config)
-	vim.api.nvim_buf_set_text(buffer, 0, 0, 0, 0, { default })
+	vim.api.nvim_buf_set_text(current_buffer, 0, 0, 0, 0, { default })
 
 	-- Put cursor at the end of the default value
 	vim.cmd("startinsert")
-	vim.api.nvim_win_set_cursor(window, { 1, vim.str_utfindex(default) + 1 })
+	vim.api.nvim_win_set_cursor(current_window, { 1, vim.str_utfindex(default) + 1 })
 
 	-- Enter to confirm
 	vim.keymap.set({ "n", "i", "v" }, "<cr>", function()
-		local lines = vim.api.nvim_buf_get_lines(buffer, 0, 1, false)
+		local lines = vim.api.nvim_buf_get_lines(current_buffer, 0, 1, false)
 		vim.cmd("stopinsert")
 		on_confirm(lines[1])
 		M.close()
-	end, { buffer = buffer })
+	end, { buffer = current_buffer })
 
 	-- Esc or q to close
 	vim.keymap.set("n", "<esc>", function()
 		on_confirm(nil)
 		vim.cmd("stopinsert")
 		M.close()
-	end, { buffer = buffer })
+	end, { buffer = current_buffer })
 	vim.keymap.set("n", "q", function()
 		on_confirm(nil)
 		vim.cmd("stopinsert")
 		M.close()
-	end, { buffer = buffer })
+	end, { buffer = current_buffer })
 end
 
 return M
