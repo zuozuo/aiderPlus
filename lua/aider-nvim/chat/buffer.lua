@@ -47,7 +47,6 @@ function M.create()
     local start_line = start_pos[2]
     local end_line = end_pos[2]
     
-    vim.notify("start_line: " .. start_line .. " end_line: " .. end_line, vim.log.levels.INFO)
     -- Check if there's an actual selection (start and end positions differ)
     if start_line ~= end_line or start_pos[3] ~= end_pos[3] then
         vim.notify("Visual selection detected", vim.log.levels.INFO)

@@ -10,7 +10,7 @@ local sent_files = {}
 
 function M.submit(full_message)
     -- Print the full message for debugging
-    vim.notify("Submitting full message:\n" .. full_message)
+    -- vim.notify("Submitting full message:\n" .. full_message)
     
     if not full_message or #full_message == 0 then return end
 
@@ -29,6 +29,7 @@ function M.submit(full_message)
 
     -- 将输入发送到 floaterm
     
+    vim.notify("sent_files: " .. vim.inspect(sent_files), vim.log.levels.INFO)
     -- Get original buffer's file path and send it first
     local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
     if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
