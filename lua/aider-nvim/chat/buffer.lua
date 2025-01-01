@@ -1,6 +1,7 @@
 
 local M = {}
 
+local input_win =nil
 local original_buf = nil
 local original_cursor_pos = nil
 local original_visual_selection = nil
@@ -10,7 +11,8 @@ function M.create()
     
     -- If input window is already open, close it first
     if M.is_open() then
-        require("snacks.input").close()
+        input_win:close()
+        input_win = nil
         return
     end
     
@@ -42,7 +44,7 @@ function M.create()
         end
     end
 
-    local input_win = require("snacks.input").input({
+    input_win = require("snacks.input").input({
         prompt = config.prompt,
         win = {
             relative = "cursor",
@@ -62,8 +64,7 @@ function M.create()
 end
 
 function M.is_open()
-    local snacks = require("snacks")
-    return snacks.input.is_open()
+    return input_win ~= nil
 end
 
 function M.get_original_buf()
