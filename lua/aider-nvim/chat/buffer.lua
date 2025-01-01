@@ -63,7 +63,8 @@ function M.create()
 end
 
 function M.is_open()
-    return false -- Always return false since we're not maintaining a window
+    local snacks = require("snacks")
+    return snacks.input.is_open()
 end
 
 function M.get_original_buf()
