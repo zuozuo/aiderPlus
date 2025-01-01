@@ -7,7 +7,6 @@ local original_visual_selection = nil
 
 function M.create()
     local config = require("aider-nvim.config").get()
-    local input = require("aider-nvim.chat.input")
     
     -- If input window is already open, close it first
     if input.is_open() then
