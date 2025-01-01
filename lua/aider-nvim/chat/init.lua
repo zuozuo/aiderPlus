@@ -25,6 +25,7 @@ function M.submit(full_message)
     end
 
     -- 将输入发送到 floaterm
+    
     -- Get original buffer's file path and send it first
     local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
     if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
