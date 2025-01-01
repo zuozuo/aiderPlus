@@ -98,4 +98,18 @@ function M.get_original_visual_selection()
     return original_visual_selection
 end
 
+function M.get_cursor_context()
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local current_line = cursor_pos[1]
+    local current_col = cursor_pos[2]
+    local buf = vim.api.nvim_get_current_buf()
+    local line_content = vim.api.nvim_buf_get_lines(buf, current_line - 1, current_line, false)[1] or ""
+    
+    return {
+        line = current_line,
+        col = current_col + 1,  -- 转换为1-based列号
+        content = line_content
+    }
+end
+
 return M
