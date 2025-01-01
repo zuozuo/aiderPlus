@@ -53,6 +53,7 @@ function M.input(opts, on_confirm, win_config)
 	}
 
 	-- Apply user's window config.
+	win_config = win_config or {}
 	win_config = vim.tbl_deep_extend("force", default_win_config, win_config)
 
 	-- Place the window near cursor or at the center of the window.
