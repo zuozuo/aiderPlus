@@ -6,7 +6,7 @@ function M.setup()
         local actions = {
             send_code = function() require("aider-nvim").send_code() end,
             send_selection = function() require("aider-nvim").send_selection() end,
-            toggle_chat = function() require("aider-nvim").toggle_chat() end,
+            toggle_chat = function() require("aider-nvim.chat.buffer").create() end,
             call_aider_plus = function() require("aider-nvim").call_aider_plus() end,
             start = function() require("aider-nvim").start() end,
         }
