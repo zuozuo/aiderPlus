@@ -104,9 +104,9 @@ function M.create()
     -- Calculate absolute position considering window position
     local abs_row = win_info.winrow + win_row + 1 -- 0-based screen position
     
-    -- Ensure minimum column position from config
-    local input_min_col = config.input_min_col or 8
-    cursor_col = math.max(cursor_col, input_min_col)
+    -- Ensure minimum left position from config
+    local input_min_left_position = config.input_min_left_position or 8
+    cursor_col = math.max(cursor_col, input_min_left_position)
     
     input_win = require("snacks.input").input({
         prompt = config.prompt,

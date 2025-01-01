@@ -4,7 +4,7 @@ M.default_config = {
     auto_start = true,
     prompt = "Send text to Aider:  ",
     code_context_window = 2,  -- 获取光标上下20行代码作为上下文
-    input_min_col = 8,        -- 输入窗口的最小列位置
+    input_min_left_position = 8,  -- 输入窗口左侧的最小位置
     quick_commands = {
         "/explain this",
         "/fix that", 
