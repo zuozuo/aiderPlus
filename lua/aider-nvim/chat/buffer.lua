@@ -28,10 +28,11 @@ end
 function M.create()
     local config = require("aider-nvim.config").get()
     
-    -- If input window is already open, close it and return
+    -- If input window is already open, close it and return to normal mode
     if M.is_open() then
         input_win:close()
         input_win = nil
+        vim.cmd("stopinsert")  -- Ensure we're in normal mode
         return
     end
     
