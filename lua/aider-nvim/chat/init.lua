@@ -2,11 +2,7 @@ local M = {}
 local buffer = require("aider-nvim.chat.buffer")
 
 function M.toggle()
-    if buffer.is_open() then
-        buffer.close()
-    else
-        buffer.create()
-    end
+    buffer.create()
 end
 
 function M.submit(input)
