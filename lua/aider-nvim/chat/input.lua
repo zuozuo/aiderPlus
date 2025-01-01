@@ -19,12 +19,14 @@ end
 function M.input(opts, on_confirm, win_config)
 	local prompt = opts.prompt or "Input: "
 	local default = opts.default or ""
+	local win_position = opts.win_position or "center"
+	local input_width = opts.input_width or 100
 	on_confirm = on_confirm or function() end
 
 	-- Calculate a minimal width with a bit buffer
 	local default_width = vim.str_utfindex(default) + 10
 	local prompt_width = vim.str_utfindex(prompt) + 10
-	local input_width = default_width > prompt_width and default_width or prompt_width
+	-- local input_width = default_width > prompt_width and default_width or prompt_width
 
 	local default_win_config = {
 		focusable = true,
@@ -39,7 +41,7 @@ function M.input(opts, on_confirm, win_config)
 	win_config = vim.tbl_deep_extend("force", default_win_config, win_config)
 
 	-- Place the window near cursor or at the center of the window.
-	if prompt == "New Name: " then
+	if win_position == "cursor" then
 		win_config = vim.tbl_deep_extend("force", win_config, M.under_cursor(win_config.width))
 	else
 		win_config = vim.tbl_deep_extend("force", win_config, M.window_center(win_config.width))
