@@ -30,7 +30,7 @@ function M.create()
     
     -- Set up completion for the input buffer
     vim.api.nvim_create_autocmd("FileType", {
-        pattern = "aider_input",
+        pattern = "snacks_input",
         callback = function()
             vim.bo.completefunc = "v:lua.require'aider-nvim.chat.buffer'.complete"
             vim.bo.completeopt = "menuone,noselect"
@@ -126,9 +126,6 @@ function M.create()
             wo = {
                 winhighlight = "NormalFloat:SnacksInputNormal,FloatBorder:SnacksInputBorder,FloatTitle:SnacksInputTitle",
                 cursorline = false,
-            },
-            b = {
-                filetype = "aider_input",
             },
             anchor = "NW",
             row = abs_row,  -- Use absolute screen position
