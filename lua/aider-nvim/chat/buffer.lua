@@ -102,7 +102,7 @@ function M.create()
     local win_row = cursor_row - 1 - win_topline  -- 0-based relative to window
     
     -- Calculate absolute position considering window position
-    local abs_row = win_info.winrow + win_row + 1 -- 0-based screen position
+    local abs_row = win_info.winrow + win_row - 1 -- 0-based screen position
     
     -- Ensure minimum left position from config
     local input_min_left_position = config.input_min_left_position or 8
