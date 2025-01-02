@@ -28,15 +28,6 @@ end
 function M.create()
     local config = require("aider-nvim.config").get()
     
-    -- Set up completion for the input buffer
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = "snacks_input",
-        callback = function()
-            vim.bo.completefunc = "v:lua.require'aider-nvim.chat.buffer'.complete"
-            vim.bo.completeopt = "menuone,noselect"
-        end
-    })
-    
     -- If input window is already open, close it and return to normal mode
     if M.is_open() then
         input_win:close()
@@ -132,6 +123,9 @@ function M.create()
             col = cursor_col
         }
     }, on_confirm)
+
+    vim.api.nvim_buf_set_option(input_win.buf, "completefunc", "v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands")
+    vim.api.nvim_buf_set_keymap(input_win.buf, "i", "/", "<cmd>call complete(col('.'), v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands())<CR>", {noremap = true, silent = true})
 end
 
 function M.is_open()
@@ -164,27 +158,20 @@ function M.get_cursor_context()
     }
 end
 
-function M.complete(findstart, base)
+-- 自动补全函数
+function M.complete_quick_commands()
+    local line = vim.api.nvim_get_current_line()
+    local prefix = line:match(".*/(.*)") or ""
+
     local config = require("aider-nvim.config").get()
-    
-    if findstart == 1 then
-        -- Find start position
-        local line = vim.fn.getline(".")
-        local col = vim.fn.col(".") - 1
-        while col > 0 and line:sub(col, col):match("%S") do
-            col = col - 1
+    local matches = {}
+    for _, cmd in ipairs(config.quick_commands) do
+        if cmd:lower():find(prefix:lower(), 1, true) then
+            table.insert(matches, {word = cmd, kind = "Quick Command"})
         end
-        return col
-    else
-        -- Return completion items
-        local completions = {}
-        for _, cmd in ipairs(config.quick_commands) do
-            if cmd:lower():find(base:lower(), 1, true) == 1 then
-                table.insert(completions, cmd)
-            end
-        end
-        return completions
     end
+
+    return matches
 end
 
 return M
