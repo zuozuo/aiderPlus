@@ -22,8 +22,29 @@ function M.submit(full_message)
   
   if term_bufnr == -1 then
     require("aider-nvim.init").start()
+    
+    -- Wait for terminal to be ready
+    local max_attempts = 6  -- 3 seconds total with 0.5s interval
+    local attempt = 1
+    local delay = 500  -- milliseconds
+
+    local function wait_for_terminal()
+      term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
+      if term_bufnr ~= -1 then
+        -- Show the terminal after it's ready
+        vim.fn["floaterm#terminal#open_existing"](term_bufnr)
+      elseif attempt <= max_attempts then
+        attempt = attempt + 1
+        vim.defer_fn(wait_for_terminal, delay)
+      else
+        vim.notify("Failed to start AiderPlus-Chat terminal after 3 seconds", vim.log.levels.ERROR)
+        return
+      end
+    end
+
+    wait_for_terminal()
   else
-    -- Show existing terminal
+    -- Show existing terminal immediately
     vim.fn["floaterm#terminal#open_existing"](term_bufnr)
   end
 

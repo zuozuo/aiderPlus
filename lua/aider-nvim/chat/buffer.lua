@@ -114,24 +114,7 @@ function M.create()
       -- Combine context with user input
       local full_message = context_message .. "User Requirement:\n" .. value
 
-      -- Wait for terminal to be ready before submitting
-      local max_attempts = 6  -- 3 seconds total with 0.5s interval
-      local attempt = 1
-      local delay = 500  -- milliseconds
-
-      local function try_submit()
-        local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
-        if term_bufnr ~= -1 then
-          require("aider-nvim.chat").submit(full_message)
-        elseif attempt <= max_attempts then
-          attempt = attempt + 1
-          vim.defer_fn(try_submit, delay)
-        else
-          vim.notify("Failed to start AiderPlus-Chat terminal after 3 seconds", vim.log.levels.ERROR)
-        end
-      end
-
-      try_submit()
+      require("aider-nvim.chat").submit(full_message)
     end
   end
 
