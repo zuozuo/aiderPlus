@@ -77,10 +77,16 @@ function M.create()
     -- Always reset state variables whether confirmed or canceled
     if value == nil then
       dd("Input canceled")
+      -- Save current input before closing
+      local input_value = vim.api.nvim_buf_get_lines(input_win.buf, 0, -1, false)[1] or ""
+      if input_value and #input_value > 0 then
+        last_user_input = input_value
+        dd("Saved last input: " .. last_user_input)
+      end
     else
       dd("Input confirmed with value: " .. value)
-      last_user_input = value  -- 保存用户输入
-      dd(last_user_input)
+      last_user_input = ""  -- Clear last input on confirmation
+      dd("Cleared last input")
     end
     reset_state()
 
