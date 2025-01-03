@@ -21,15 +21,7 @@ function M.submit(full_message)
   local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
   
   if term_bufnr == -1 then
-    -- Create new terminal if it doesn't exist
-    term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
-    
-    -- Wait a bit for terminal to initialize
-    vim.defer_fn(function()
-      if term_bufnr ~= -1 then
-        vim.fn["floaterm#terminal#open_existing"](term_bufnr)
-      end
-    end, 100)
+    require("aider-nvim.init").start()
   else
     -- Show existing terminal
     vim.fn["floaterm#terminal#open_existing"](term_bufnr)
