@@ -1,10 +1,17 @@
 
 local M = {}
 
-local input_win =nil
+local input_win = nil
 local original_buf = nil
 local original_cursor_pos = nil
 local original_visual_selection = nil
+
+local function reset_state()
+  input_win = nil
+  original_buf = nil
+  original_cursor_pos = nil
+  original_visual_selection = nil
+end
 
 function M.get_code_context(window_size)
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
@@ -31,12 +38,8 @@ function M.create()
   -- If input window is already open, close it and return to normal mode
   if M.is_open() then
     input_win:close()
-    input_win = nil
     vim.cmd("stopinsert")  -- Ensure we're in normal mode
-    -- Reset all state variables
-    original_buf = nil
-    original_cursor_pos = nil
-    original_visual_selection = nil
+    reset_state()
     return
   end
 
@@ -76,10 +79,7 @@ function M.create()
     else
       dd("Input confirmed with value: " .. value)
     end
-    input_win = nil
-    original_buf = nil
-    original_cursor_pos = nil
-    original_visual_selection = nil
+    reset_state()
 
     if value and #value > 0 then
       -- Get all context information
@@ -139,11 +139,7 @@ function M.create()
     },
     on_close = function()
       dd("Input window closed via on_close callback")
-      -- Reset all state variables when input window is closed
-      input_win = nil
-      original_buf = nil
-      original_cursor_pos = nil
-      original_visual_selection = nil
+      reset_state()
     end
   }, on_confirm)
 
