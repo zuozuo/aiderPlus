@@ -48,8 +48,6 @@ function M.create()
 
   -- Save original buffer and cursor position
   original_buf = vim.api.nvim_get_current_buf()
-  dd(original_buf)
-  dd"original_buf"
   original_cursor_pos = vim.api.nvim_win_get_cursor(0)
 
   -- Clear previous selection
@@ -78,7 +76,6 @@ function M.create()
       end_line = end_line,
       content = numbered_lines
     }
-    dd(original_visual_selection)
   end
 
   local on_confirm = function(value)
