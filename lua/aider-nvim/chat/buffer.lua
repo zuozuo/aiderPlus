@@ -33,6 +33,10 @@ function M.create()
         input_win:close()
         input_win = nil
         vim.cmd("stopinsert")  -- Ensure we're in normal mode
+        -- Reset all state variables
+        original_buf = nil
+        original_cursor_pos = nil
+        original_visual_selection = nil
         return
     end
     
