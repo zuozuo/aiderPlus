@@ -32,9 +32,9 @@ function M.submit(full_message)
 
   -- Get original buffer's file path and send it first
   local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
-  -- dd(vim.api.nvim_buf_is_valid(original_buf))
-  dd(original_buf)
+  dd("Original buffer:", original_buf)
   if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
+    dd("Buffer is valid")
     local full_path = vim.api.nvim_buf_get_name(original_buf)
     dd("full_path"..full_path)
     if full_path and #full_path > 0 and not full_path:match("^term://") then

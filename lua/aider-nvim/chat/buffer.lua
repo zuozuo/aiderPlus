@@ -82,6 +82,9 @@ function M.create()
   end
 
   local on_confirm = function(value)
+    -- Store the original buffer before resetting state
+    local current_original_buf = original_buf
+
     -- Always reset state variables whether confirmed or canceled
     if value == nil then
       last_user_input = current_input_value
@@ -92,6 +95,8 @@ function M.create()
     reset_state()
 
     if value and #value > 0 then
+      -- Restore original buffer reference for the submit
+      original_buf = current_original_buf
       -- Get all context information
       local cursor_context = M.get_cursor_context()
       local code_context = M.get_code_context(5)  -- Use window_size of 5
