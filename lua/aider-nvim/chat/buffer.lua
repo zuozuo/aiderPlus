@@ -119,6 +119,7 @@ function M.create()
     end
   end
 
+  -- 准备输入窗口的位置信息
   -- Get current cursor position and window information
   local current_cursor = vim.api.nvim_win_get_cursor(0)
   local cursor_row, cursor_col = unpack(current_cursor)
