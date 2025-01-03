@@ -17,17 +17,23 @@ function M.submit(full_message)
 
   local config = require("aider-nvim.config").get()
 
-  -- 检查是否存在名为 AiderPlus-Chat 的 floaterm 窗口
-  -- local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
-
-  if term_bufnr ~= -1 then
-    -- 如果存在则显示窗口
-    vim.fn["floaterm#terminal#open_existing"](term_bufnr)
+  -- Create or show the AiderPlus-Chat terminal
+  local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
+  
+  if term_bufnr == -1 then
+    -- Create new terminal if it doesn't exist
+    vim.fn["floaterm#terminal#open"](config.floaterm_command)
+    term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
+    
+    -- Wait a bit for terminal to initialize
+    vim.defer_fn(function()
+      if term_bufnr ~= -1 then
+        vim.fn["floaterm#terminal#open_existing"](term_bufnr)
+      end
+    end, 100)
   else
-    -- vim.notify("AiderPlus-Chat terminal not found, please create a new one", vim.log.levels.INFO)
-    -- vim.fn["floaterm#terminal#open"](config.floaterm_command)
-    vim.cmd(config.get().floaterm_command)
-    return
+    -- Show existing terminal
+    vim.fn["floaterm#terminal#open_existing"](term_bufnr)
   end
 
   -- 将输入发送到 floaterm
