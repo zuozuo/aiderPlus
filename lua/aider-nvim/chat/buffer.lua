@@ -39,7 +39,6 @@ function M.create()
         return
     end
     
-    dd("====================================here")
     -- Save original buffer and cursor position
     original_buf = vim.api.nvim_get_current_buf()
     original_cursor_pos = vim.api.nvim_win_get_cursor(0)
