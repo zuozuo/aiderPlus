@@ -70,6 +70,12 @@ function M.create()
   end
 
   local on_confirm = function(value)
+    -- Always reset state variables whether confirmed or canceled
+    input_win = nil
+    original_buf = nil
+    original_cursor_pos = nil
+    original_visual_selection = nil
+
     if value and #value > 0 then
       -- Get all context information
       local cursor_context = M.get_cursor_context()
