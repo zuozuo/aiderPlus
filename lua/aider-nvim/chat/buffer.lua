@@ -1,4 +1,3 @@
-
 local M = {}
 
 local input_win = nil
