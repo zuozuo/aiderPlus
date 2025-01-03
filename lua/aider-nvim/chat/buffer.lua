@@ -43,14 +43,6 @@ function M.create()
     vim.cmd("stopinsert")  -- Ensure we're in normal mode
     last_user_input = current_input_value
     reset_state()
-    
-    -- Restore visual selection if it existed
-    if original_visual_selection then
-      dd('================================ original_selection detected')
-      vim.api.nvim_win_set_cursor(0, {original_visual_selection.start_line, 0})
-      vim.cmd("normal! V")
-      vim.api.nvim_win_set_cursor(0, {original_visual_selection.end_line, 0})
-    end
     return
   end
 
