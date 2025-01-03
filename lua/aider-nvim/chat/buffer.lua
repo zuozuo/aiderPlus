@@ -5,6 +5,7 @@ local original_buf = nil
 local original_cursor_pos = nil
 local original_visual_selection = nil
 local last_user_input = ""  -- 新增变量存储用户输入
+local current_input_value = "" -- 存储当前输入
 
 local function reset_state()
   input_win = nil
@@ -40,6 +41,7 @@ function M.create()
   if M.is_open() then
     input_win:close()
     vim.cmd("stopinsert")  -- Ensure we're in normal mode
+    last_user_input = current_input_value
     reset_state()
     return
   end
@@ -76,17 +78,10 @@ function M.create()
   local on_confirm = function(value)
     -- Always reset state variables whether confirmed or canceled
     if value == nil then
-      dd("Input canceled")
-      -- Save current input before closing
-      local input_value = vim.api.nvim_buf_get_lines(input_win.buf, 0, -1, false)[1] or ""
-      if input_value and #input_value > 0 then
-        last_user_input = input_value
-        dd("Saved last input: " .. last_user_input)
-      end
+      last_user_input = current_input_value
     else
-      dd("Input confirmed with value: " .. value)
-      last_user_input = ""  -- Clear last input on confirmation
-      dd("Cleared last input")
+      last_user_input = ""
+      current_input_value = ""
     end
     reset_state()
 
@@ -132,7 +127,6 @@ function M.create()
   local input_min_left_position = config.input_min_left_position or 8
   cursor_col = math.max(cursor_col, input_min_left_position)
 
-  dd(last_user_input)
   input_win = require("snacks.input").input({
     prompt = config.prompt,
     default = last_user_input,  -- 恢复上次输入
@@ -148,11 +142,14 @@ function M.create()
       row = abs_row,  -- Use absolute screen position
       col = cursor_col
     },
-    on_close = function()
-      dd("Input window closed via on_close callback")
-      reset_state()
-    end
   }, on_confirm)
+
+  vim.api.nvim_buf_attach(input_win.buf, false, {                                     
+    on_lines = function(_, _, _, _, _, _)                                             
+      local lines = vim.api.nvim_buf_get_lines(input_win.buf, 0, -1, false)           
+      current_input_value = lines[1] or ""                                                  
+    end                                                                               
+  })                                                                                  
 
   vim.api.nvim_buf_set_option(input_win.buf, "completefunc", "v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands")
   vim.api.nvim_buf_set_keymap(input_win.buf, "i", "/", "<cmd>call complete(col('.'), v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands())<CR>", {noremap = true, silent = true})
@@ -187,6 +184,10 @@ function M.get_cursor_context()
     content = line_content
   }
 end
+
+function M.get_current_input_value()                                                        
+  return current_input_value                                                                
+end                                                                                   
 
 -- 自动补全函数
 function M.complete_quick_commands()
