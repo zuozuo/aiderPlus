@@ -125,7 +125,14 @@ function M.create()
             anchor = "NW",
             row = abs_row,  -- Use absolute screen position
             col = cursor_col
-        }
+        },
+        on_close = function()
+            -- Reset all state variables when input window is closed
+            input_win = nil
+            original_buf = nil
+            original_cursor_pos = nil
+            original_visual_selection = nil
+        end
     }, on_confirm)
 
     vim.api.nvim_buf_set_option(input_win.buf, "completefunc", "v:lua.require'aider-nvim.chat.buffer'.complete_quick_commands")
