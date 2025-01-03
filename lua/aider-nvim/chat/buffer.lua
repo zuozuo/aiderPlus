@@ -32,9 +32,6 @@ function M.create()
     if M.is_open() then
         input_win:close()
         input_win = nil
-        original_buf = nil
-        original_cursor_pos = nil
-        original_visual_selection = nil
         vim.cmd("stopinsert")  -- Ensure we're in normal mode
         return
     end
