@@ -4,9 +4,11 @@ local input_win = nil
 local original_buf = nil
 local original_cursor_pos = nil
 local original_visual_selection = nil
+local last_user_input = ""  -- 新增变量存储用户输入
 
 local function reset_state()
   input_win = nil
+  -- 保留 last_user_input 不清除
   original_buf = nil
   original_cursor_pos = nil
   original_visual_selection = nil
@@ -77,6 +79,7 @@ function M.create()
       dd("Input canceled")
     else
       dd("Input confirmed with value: " .. value)
+      last_user_input = value  -- 保存用户输入
     end
     reset_state()
 
@@ -124,6 +127,7 @@ function M.create()
 
   input_win = require("snacks.input").input({
     prompt = config.prompt,
+    default = last_user_input,  -- 恢复上次输入
     win = {
       relative = "editor",
       height = 1,
