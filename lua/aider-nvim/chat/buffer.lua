@@ -67,6 +67,9 @@ function M.create()
     for i, line in ipairs(lines) do
       table.insert(numbered_lines, string.format("%d: %s", start_line + i - 1, line))
     end
+    -- Adjust start_line and end_line to be absolute positions
+    start_line = start_line
+    end_line = end_line
 
     original_visual_selection = {
       start_line = start_line,
