@@ -138,8 +138,7 @@ function M.create()
       col = cursor_col
     },
     on_close = function()
-
-      -- dd("=======================on_clase_called=============")
+      dd("Input window closed via on_close callback")
       -- Reset all state variables when input window is closed
       input_win = nil
       original_buf = nil
