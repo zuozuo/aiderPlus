@@ -17,7 +17,7 @@ M.default_config = {
         toggle_chat = "<D-k>",
         call_aider_plus = "<leader>ap",
     },
-    floaterm_command = "FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 zsh",
+    floaterm_command = "FloatermNew --name=AiderPlus-Chat --wintype=vsplit --width=0.4 aider",
 }
 
 function M.setup(user_config)
