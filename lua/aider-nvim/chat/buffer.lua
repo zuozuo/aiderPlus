@@ -71,7 +71,11 @@ function M.create()
 
   local on_confirm = function(value)
     -- Always reset state variables whether confirmed or canceled
-    dd("=======================111")
+    if value == nil then
+      dd("Input canceled")
+    else
+      dd("Input confirmed with value: " .. value)
+    end
     input_win = nil
     original_buf = nil
     original_cursor_pos = nil
