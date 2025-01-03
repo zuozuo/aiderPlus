@@ -80,6 +80,7 @@ function M.create()
     else
       dd("Input confirmed with value: " .. value)
       last_user_input = value  -- 保存用户输入
+      dd(last_user_input)
     end
     reset_state()
 
@@ -125,6 +126,7 @@ function M.create()
   local input_min_left_position = config.input_min_left_position or 8
   cursor_col = math.max(cursor_col, input_min_left_position)
 
+  dd(last_user_input)
   input_win = require("snacks.input").input({
     prompt = config.prompt,
     default = last_user_input,  -- 恢复上次输入
