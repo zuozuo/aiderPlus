@@ -22,7 +22,17 @@ function M.submit(full_message)
   
   if term_bufnr == -1 then
     -- Create new terminal if it doesn't exist
-    vim.fn["floaterm#terminal#open"](config.floaterm_command)
+    vim.fn["floaterm#new"](1, {
+      name = "AiderPlus-Chat",
+      title = "AiderPlus Chat",
+      wintype = "float",
+      position = "center",
+      width = 0.9,
+      height = 0.8,
+      autoclose = 0,
+      titleposition = "left",
+      cmd = config.floaterm_command
+    })
     term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
     
     -- Wait a bit for terminal to initialize
