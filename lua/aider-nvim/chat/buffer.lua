@@ -37,12 +37,19 @@ end
 function M.create()
   local config = require("aider-nvim.config").get()
 
-  -- If input window is already open, close it and return to normal mode
+  -- If input window is already open, close it and return to visual mode
   if M.is_open() then
     input_win:close()
     vim.cmd("stopinsert")  -- Ensure we're in normal mode
     last_user_input = current_input_value
     reset_state()
+    
+    -- Restore visual selection if it existed
+    if original_visual_selection then
+      vim.api.nvim_win_set_cursor(0, {original_visual_selection.start_line, 0})
+      vim.cmd("normal! V")
+      vim.api.nvim_win_set_cursor(0, {original_visual_selection.end_line, 0})
+    end
     return
   end
 
@@ -54,14 +61,14 @@ function M.create()
   original_visual_selection = nil
 
   -- Save visual selection before mode changes
+  local mode = vim.fn.mode()
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
   local start_line = start_pos[2]
   local end_line = end_pos[2]
 
   -- Check if there's an actual selection (start and end positions differ)
-  if start_line ~= end_line or start_pos[3] ~= end_pos[3] then
-    vim.notify("Visual selection detected", vim.log.levels.INFO)
+  if mode:match("[vV]") then
     local lines = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
     local numbered_lines = {}
     for i, line in ipairs(lines) do
