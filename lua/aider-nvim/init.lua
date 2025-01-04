@@ -7,10 +7,7 @@ local chat = require("aider-nvim.chat")
 local utils = require("aider-nvim.utils")
 
 function M.setup(user_config)
-    -- Initialize plugin configuration with user provided settings
     config.setup(user_config)
-    
-    -- Set up key mappings based on configuration
     keymaps.setup()
     
     -- Register user commands for AiderPlus functionality
