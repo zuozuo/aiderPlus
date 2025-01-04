@@ -196,9 +196,7 @@ function M.submit_and_close()
 end
 
 function M.call_aider_plus()
-    -- Call Aider Plus functionality
     vim.notify("Aider Plus called", vim.log.levels.INFO)
-    -- TODO: Implement Aider Plus specific logic here
 end
 
 return M
