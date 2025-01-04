@@ -7,10 +7,16 @@ local chat = require("aider-nvim.chat")
 local utils = require("aider-nvim.utils")
 
 function M.setup(user_config)
+    -- Initialize plugin configuration with user provided settings
     config.setup(user_config)
+    
+    -- Set up key mappings based on configuration
     keymaps.setup()
+    
+    -- Register user commands for AiderPlus functionality
     commands.setup()
 
+    -- Automatically start Aider if configured to do so
     if config.get().auto_start then
         M.start_aider()
     end
@@ -18,11 +24,14 @@ end
 
 function M.start_aider()
     -- Start Aider process
+    -- TODO: Implement actual Aider process startup
+    -- Currently just a placeholder for future implementation
     -- vim.notify("hello", vim.log.levels.INFO)
 end
 
 function M.start()
-    -- Check if floaterm is available using multiple methods
+    -- Initialize AiderPlus chat interface
+    -- Checks if floaterm is available using multiple methods
     local floaterm_available = false
     local floaterm_error = nil
     
