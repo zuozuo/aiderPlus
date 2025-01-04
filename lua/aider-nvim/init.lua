@@ -1,10 +1,12 @@
+-- Main module table for the Aider.nvim plugin
 local M = {}
 
-local config = require("aider-nvim.config")
-local keymaps = require("aider-nvim.keymaps")
-local commands = require("aider-nvim.commands")
-local chat = require("aider-nvim.chat")
-local utils = require("aider-nvim.utils")
+-- Import required submodules
+local config = require("aider-nvim.config")  -- Configuration management
+local keymaps = require("aider-nvim.keymaps")  -- Keybindings setup
+local commands = require("aider-nvim.commands")  -- User commands
+local chat = require("aider-nvim.chat")  -- Chat interface functionality
+local utils = require("aider-nvim.utils")  -- Utility functions
 
 function M.setup(user_config)
     config.setup(user_config)
