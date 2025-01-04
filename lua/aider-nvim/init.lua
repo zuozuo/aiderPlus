@@ -53,6 +53,9 @@ function M.start()
         vim.notify(msg, vim.log.levels.ERROR)
         return
     end
+    
+    -- Add hello notification
+    vim.notify("hello", vim.log.levels.INFO)
 
     -- Check if terminal already exists
     local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
