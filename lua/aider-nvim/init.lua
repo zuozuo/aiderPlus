@@ -1,47 +1,34 @@
--- Main module table for the Aider.nvim plugin
 local M = {}
-
--- Import required submodules
-local config = require("aider-nvim.config")  -- Configuration management
-local keymaps = require("aider-nvim.keymaps")  -- Keybindings setup
-local commands = require("aider-nvim.commands")  -- User commands
-local chat = require("aider-nvim.chat")  -- Chat interface functionality
-local utils = require("aider-nvim.utils")  -- Utility functions
+local config = require("aider-nvim.config")
+local keymaps = require("aider-nvim.keymaps")
+local commands = require("aider-nvim.commands")
+local chat = require("aider-nvim.chat")
+local utils = require("aider-nvim.utils")
 
 function M.setup(user_config)
     config.setup(user_config)
     keymaps.setup()
     
-    -- Register user commands for AiderPlus functionality
     commands.setup()
 
-    -- Automatically start Aider if configured to do so
     if config.get().auto_start then
         M.start_aider()
     end
 end
 
 function M.start_aider()
-    -- Start Aider process
-    -- TODO: Implement actual Aider process startup
-    -- Currently just a placeholder for future implementation
-    -- vim.notify("hello", vim.log.levels.INFO)
 end
 
 function M.start()
-    -- Initialize AiderPlus chat interface
-    -- Checks if floaterm is available using multiple methods
     local floaterm_available = false
     local floaterm_error = nil
     
-    -- Try multiple ways to check for floaterm
     local success, result = pcall(function()
         if vim.fn.exists("*floaterm#terminal#get_bufnr") == 1 then
             floaterm_available = true
         elseif vim.fn.exists(":FloatermNew") == 2 then
             floaterm_available = true
         else
-            -- Try loading floaterm
             vim.cmd("packadd floaterm")
             if vim.fn.exists("*floaterm#terminal#get_bufnr") == 1 then
                 floaterm_available = true
@@ -62,17 +49,14 @@ function M.start()
         return
     end
     
-    -- Add hello notification
     vim.notify("hello", vim.log.levels.INFO)
 
-    -- Check if terminal already exists
     local term_bufnr = vim.fn["floaterm#terminal#get_bufnr"]("AiderPlus-Chat")
     if term_bufnr ~= -1 then
         vim.notify("AiderPlus-Chat terminal already exists", vim.log.levels.INFO)
         return
     end
 
-    -- Create new floaterm window
     local create_success, create_result = pcall(function()
         vim.cmd(config.get().floaterm_command)
     end)
@@ -89,7 +73,6 @@ function M.send_code()
     local buf = vim.api.nvim_get_current_buf()
     if vim.api.nvim_buf_is_valid(buf) then
        local content = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
-        -- TODO: Send to Aider
         vim.notify("Code sent to Aider", vim.log.levels.INFO)
     else
         vim.notify("Invalid buffer", vim.log.levels.ERROR)
@@ -163,11 +146,9 @@ function M.get_code_context()
     
     local current_line = original_cursor_pos[1]
     
-    -- 计算上下行范围
     local start_line = math.max(1, current_line - config.code_context_window)
     local end_line = current_line + config.code_context_window
     
-    -- 获取代码并添加行号
     local lines = vim.api.nvim_buf_get_lines(original_buf, start_line - 1, end_line, false)
     local numbered_lines = {}
     for i, line in ipairs(lines) do
