@@ -19,6 +19,38 @@ end
 function M.start_aider()
 end
 
+function M.start_aider_background()
+    local cmd = "aider"  -- You might want to make this configurable
+    local opts = {
+        on_exit = function()
+            vim.notify("Aider background process exited", vim.log.levels.INFO)
+        end,
+        on_stdout = function(_, data)
+            if data then
+                vim.notify("Aider output: " .. table.concat(data, "\n"), vim.log.levels.INFO)
+            end
+        end,
+        on_stderr = function(_, data)
+            if data then
+                vim.notify("Aider error: " .. table.concat(data, "\n"), vim.log.levels.ERROR)
+            end
+        end
+    }
+    
+    local success, result = pcall(function()
+        local job_id = vim.fn.termopen(cmd, opts)
+        if job_id > 0 then
+            vim.notify("Aider started in background (job id: " .. job_id .. ")", vim.log.levels.INFO)
+        else
+            vim.notify("Failed to start Aider in background", vim.log.levels.ERROR)
+        end
+    end)
+    
+    if not success then
+        vim.notify("Error starting Aider background process: " .. tostring(result), vim.log.levels.ERROR)
+    end
+end
+
 function M.start()
     local floaterm_available = false
     local floaterm_error = nil
