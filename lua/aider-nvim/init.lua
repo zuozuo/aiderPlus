@@ -200,14 +200,34 @@ function M.get_current_line()
     local original_buf = buffer.get_original_buf()
     local original_cursor_pos = buffer.get_original_cursor_pos()
     
-    if not original_buf or not original_cursor_pos then
+    -- Validate buffer and cursor position
+    if not original_buf or not vim.api.nvim_buf_is_valid(original_buf) then
+        vim.notify("Invalid buffer when getting current line", vim.log.levels.WARN)
+        return "", 0
+    end
+    
+    if not original_cursor_pos or type(original_cursor_pos) ~= "table" or #original_cursor_pos < 2 then
+        vim.notify("Invalid cursor position when getting current line", vim.log.levels.WARN)
         return "", 0
     end
     
     local line_num = original_cursor_pos[1]
-    local line = vim.api.nvim_buf_get_lines(original_buf, line_num - 1, line_num, false)[1] or ""
     
-    return line, line_num
+    -- Validate line number is within buffer bounds
+    local buf_line_count = vim.api.nvim_buf_line_count(original_buf)
+    if line_num < 1 or line_num > buf_line_count then
+        vim.notify("Cursor position out of bounds when getting current line", vim.log.levels.WARN)
+        return "", 0
+    end
+    
+    -- Get the line content safely
+    local success, lines = pcall(vim.api.nvim_buf_get_lines, original_buf, line_num - 1, line_num, false)
+    if not success or not lines or #lines == 0 then
+        vim.notify("Failed to get current line content", vim.log.levels.ERROR)
+        return "", 0
+    end
+    
+    return lines[1] or "", line_num
 end
 
 function M.get_code_context()
