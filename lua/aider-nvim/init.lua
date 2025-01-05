@@ -62,8 +62,8 @@ function M.send_to_terminal(text)
         text = text .. "\n"
     end
     
-    -- Get current terminal job id
-    local job_id = vim.b.terminal_job_id
+    -- Use stored terminal job id if available
+    local job_id = M.terminal_job_id or vim.b.terminal_job_id
     if not job_id then
         vim.notify("No active terminal found", vim.log.levels.ERROR)
         return
@@ -74,12 +74,17 @@ function M.send_to_terminal(text)
     vim.notify("Text sent to terminal", vim.log.levels.INFO)
 end
 
+M.terminal_job_id = nil
+
 function M.start_terminal()
     -- Create a vertical split
     vim.cmd("vsplit")
     
     -- Open terminal in the new window
     vim.cmd("terminal")
+    
+    -- Store the terminal job id
+    M.terminal_job_id = vim.b.terminal_job_id
     
     -- Send the aider command
     M.send_to_terminal("aider")
