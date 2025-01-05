@@ -51,6 +51,19 @@ function M.start_aider_in_background()
     end
 end
 
+function M.start_terminal()
+    -- Create a vertical split
+    vim.cmd("vsplit")
+    
+    -- Open terminal in the new window
+    vim.cmd("terminal")
+    
+    -- Enter terminal mode
+    vim.cmd("startinsert")
+    
+    vim.notify("Neovim terminal started in vertical split", vim.log.levels.INFO)
+end
+
 function M.start()
     local floaterm_available = false
     local floaterm_error = nil
