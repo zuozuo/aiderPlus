@@ -57,10 +57,8 @@ function M.send_to_terminal(text)
         return
     end
     
-    -- Ensure text ends with newline
-    if not text:match("\n$") then
-        text = text .. "\n"
-    end
+    -- Remove all newlines and ensure single trailing newline
+    text = text:gsub("[\r\n]+", " ") .. "\n"
     
     -- Use stored terminal job id if available
     local job_id = M.terminal_job_id or vim.b.terminal_job_id
@@ -69,9 +67,9 @@ function M.send_to_terminal(text)
         return
     end
     
-    -- Send text to terminal
+    -- Send text to terminal as single line
     vim.api.nvim_chan_send(job_id, text)
-    vim.notify("Text sent to terminal", vim.log.levels.INFO)
+    vim.notify("Text sent to terminal as single line", vim.log.levels.INFO)
 end
 
 M.terminal_job_id = nil
