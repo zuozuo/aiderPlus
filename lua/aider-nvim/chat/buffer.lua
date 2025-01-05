@@ -114,7 +114,8 @@ function M.create()
       -- Combine context with user input
       local full_message = context_message .. "User Requirement:\n" .. value
 
-      require("aider-nvim.chat").submit(full_message)
+      -- require("aider-nvim.chat").submit(full_message)
+      require("aider-nvim.chat").submit_to_terminal(full_message)
     end
   end
 
