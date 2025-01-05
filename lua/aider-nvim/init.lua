@@ -20,7 +20,7 @@ function M.start_aider()
 end
 
 function M.start_aider_in_background()
-    local cmd = "aider"  -- You might want to make this configurable
+    local cmd = "aider --no-suggest-shell-commands"  -- You might want to make this configurable 
     local opts = {
         on_exit = function()
             vim.notify("Aider background process exited", vim.log.levels.INFO)
@@ -85,7 +85,7 @@ function M.start_terminal()
     M.terminal_job_id = vim.b.terminal_job_id
     
     -- Send the aider command
-    M.send_to_terminal("aider")
+    M.send_to_terminal("aider --no-suggest-shell-commands")
     
     -- Enter terminal mode
     vim.cmd("startinsert")
