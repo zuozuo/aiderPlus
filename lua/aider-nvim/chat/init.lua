@@ -102,8 +102,25 @@ function M.submit_to_terminal(full_message)
     end
   end
 
-  -- Send the user input with context info
-  init.send_to_terminal(full_message)
+  -- Verify terminal is ready before sending
+  local max_attempts = 6  -- 3 seconds total with 0.5s interval
+  local attempt = 1
+  local delay = 500  -- milliseconds
+
+  local function wait_and_send()
+    if init.terminal_job_id then
+      -- Terminal is ready, send the message
+      init.send_to_terminal(full_message)
+    elseif attempt <= max_attempts then
+      attempt = attempt + 1
+      vim.defer_fn(wait_and_send, delay)
+    else
+      vim.notify("Failed to start AiderPlus-Chat terminal after 3 seconds", vim.log.levels.ERROR)
+      return
+    end
+  end
+
+  wait_and_send()
 end
 
 return M
