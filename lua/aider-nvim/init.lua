@@ -19,7 +19,7 @@ end
 function M.start_aider()
 end
 
-function M.start_aider_background()
+function M.start_aider_in_background()
     local cmd = "aider"  -- You might want to make this configurable
     local opts = {
         on_exit = function()
