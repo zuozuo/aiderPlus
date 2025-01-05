@@ -71,4 +71,39 @@ function M.submit(full_message)
   vim.fn["floaterm#terminal#send"](term_bufnr, {full_message})
 end
 
+function M.submit_to_terminal(full_message)
+  -- Print the full message for debugging
+  dd(full_message)
+
+  if not full_message or #full_message == 0 then return end
+
+  -- Get the init module with terminal functions
+  local init = require("aider-nvim.init")
+
+  -- Start terminal if not already running
+  if not init.terminal_job_id then
+    init.start_terminal()
+  end
+
+  -- Get original buffer's file path and send it first
+  local original_buf = require("aider-nvim.chat.buffer").get_original_buf()
+  if original_buf and vim.api.nvim_buf_is_valid(original_buf) then
+    local full_path = vim.api.nvim_buf_get_name(original_buf)
+    if full_path and #full_path > 0 and not full_path:match("^term://") then
+      -- Get relative path from current working directory
+      local cwd = vim.fn.getcwd()
+      local rel_path = full_path:gsub("^" .. cwd .. "/", "")
+
+      -- Only send if we haven't sent this file before
+      if not sent_files[rel_path] then
+        init.send_to_terminal("/add " .. rel_path)
+        sent_files[rel_path] = true  -- Mark as sent
+      end
+    end
+  end
+
+  -- Send the user input with context info
+  init.send_to_terminal(full_message)
+end
+
 return M
