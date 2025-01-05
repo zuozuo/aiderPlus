@@ -58,10 +58,13 @@ function M.start_terminal()
     -- Open terminal in the new window
     vim.cmd("terminal")
     
+    -- Send the aider command
+    vim.api.nvim_chan_send(vim.b.terminal_job_id, "aider\n")
+    
     -- Enter terminal mode
     vim.cmd("startinsert")
     
-    vim.notify("Neovim terminal started in vertical split", vim.log.levels.INFO)
+    vim.notify("Neovim terminal started with aider command", vim.log.levels.INFO)
 end
 
 function M.start()
