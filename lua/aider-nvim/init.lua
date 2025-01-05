@@ -51,6 +51,29 @@ function M.start_aider_in_background()
     end
 end
 
+function M.send_to_terminal(text)
+    if not text or #text == 0 then
+        vim.notify("No text provided to send to terminal", vim.log.levels.WARN)
+        return
+    end
+    
+    -- Ensure text ends with newline
+    if not text:match("\n$") then
+        text = text .. "\n"
+    end
+    
+    -- Get current terminal job id
+    local job_id = vim.b.terminal_job_id
+    if not job_id then
+        vim.notify("No active terminal found", vim.log.levels.ERROR)
+        return
+    end
+    
+    -- Send text to terminal
+    vim.api.nvim_chan_send(job_id, text)
+    vim.notify("Text sent to terminal", vim.log.levels.INFO)
+end
+
 function M.start_terminal()
     -- Create a vertical split
     vim.cmd("vsplit")
@@ -59,7 +82,7 @@ function M.start_terminal()
     vim.cmd("terminal")
     
     -- Send the aider command
-    vim.api.nvim_chan_send(vim.b.terminal_job_id, "aider\n")
+    M.send_to_terminal("aider")
     
     -- Enter terminal mode
     vim.cmd("startinsert")
